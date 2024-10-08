@@ -1,0 +1,6 @@
+@LearningMate.WebAPI_HostAddress = http://localhost:5168
+
+GET {{LearningMate.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,6 @@
+{
+  "WeatherApi": {
+    "ClientId": "abc",
+    "ClientSecret": "secret"
+  }
+}
