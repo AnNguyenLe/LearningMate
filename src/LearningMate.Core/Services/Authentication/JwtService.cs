@@ -20,7 +20,7 @@ public class JwtService(ILogger<JwtService> logger, IOptions<JwtConfiguration> j
     {
         _logger.LogInformation(nameof(GenerateAccessToken));
 
-        var expiresAt = DateTime.UtcNow.AddSeconds(_jwtConfiguration.AccessTokenLifeTimeInSeconds);
+        var expiresAt = DateTime.UtcNow.AddHours(_jwtConfiguration.AccessTokenLifeTimeInHours);
 
         var claims = new Claim[]
         {

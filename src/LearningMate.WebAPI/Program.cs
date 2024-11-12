@@ -17,9 +17,9 @@ builder.Host.UseSerilog(
 
 builder.Services.ConfigureServices(builder.Configuration);
 
-builder.Services.DependencyInjectionServices();
+builder.Services.DependencyInjectionServices(builder.Configuration);
 
-builder.Configuration.AddJsonFile("WeatherApiConfig.json", optional: true, reloadOnChange: true);
+builder.Services.ConfigureValidators();
 
 var app = builder.Build();
 

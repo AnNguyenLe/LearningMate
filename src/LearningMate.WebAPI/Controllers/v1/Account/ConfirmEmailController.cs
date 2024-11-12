@@ -12,6 +12,7 @@ namespace LearningMate.WebAPI.Controllers.v1.Account
     {
         private readonly IAuthenticationService _authenticationService = authenticationService;
 
+        [Obsolete("api/v1/account/confirm-email api is now obsolete")]
         [HttpGet]
         [Route("api/v1/account/confirm-email")]
         [AllowAnonymous]

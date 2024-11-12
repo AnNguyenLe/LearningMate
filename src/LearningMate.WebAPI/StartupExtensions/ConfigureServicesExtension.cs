@@ -65,7 +65,7 @@ public static class ConfigureServicesExtension
                 "v1",
                 new Microsoft.OpenApi.Models.OpenApiInfo()
                 {
-                    Title = "Weather Forecast Web API",
+                    Title = "APIs version 1",
                     Version = "1.0"
                 }
             );
@@ -74,7 +74,7 @@ public static class ConfigureServicesExtension
                 "v2",
                 new Microsoft.OpenApi.Models.OpenApiInfo()
                 {
-                    Title = "Weather Forecast Web API",
+                    Title = "APIs version 2",
                     Version = "2.0"
                 }
             );
@@ -117,6 +117,8 @@ public static class ConfigureServicesExtension
                 .UseNpgsql(configuration.GetConnectionString("Default"))
                 .UseSnakeCaseNamingConvention();
         });
+
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
         services
             .AddIdentity<AppUser, AppRole>(options =>

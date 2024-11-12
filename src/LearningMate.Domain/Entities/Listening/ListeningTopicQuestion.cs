@@ -2,7 +2,7 @@ using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
 
 namespace LearningMate.Domain.Entities.Listening;
 
-public class ListeningTopicQuestion
+public class ListeningTopicQuestion : IMultipleChoiceQuestion
 {
     public Guid Id { get; set; }
     public string? Question { get; set; }
