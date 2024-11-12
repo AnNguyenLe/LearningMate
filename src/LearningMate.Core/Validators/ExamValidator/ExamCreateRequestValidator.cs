@@ -1,5 +1,5 @@
 using FluentValidation;
-using LearningMate.Core.DTOs.Exam;
+using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Domain.Entities;
 

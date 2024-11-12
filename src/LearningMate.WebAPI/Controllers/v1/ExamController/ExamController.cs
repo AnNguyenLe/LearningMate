@@ -1,6 +1,6 @@
 using FluentValidation;
 using LearningMate.Core.ConfigurationOptions.AppServer;
-using LearningMate.Core.DTOs.Exam;
+using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ServiceContracts.ExamsServiceContract;
 using LearningMate.Domain.IdentityEntities;
 using Microsoft.AspNetCore.Identity;

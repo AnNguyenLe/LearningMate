@@ -1,5 +1,5 @@
 using FluentResults;
-using LearningMate.Core.DTOs.Exam;
+using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
@@ -25,5 +25,25 @@ public partial class ExamsService
         }
 
         return _examMapper.MapExamToExamOverviewGetResponseDto(getExamResult.Value);
+    }
+
+    public async Task<Result<ExamHasReadingTopicsGetRequestDto>> GetReadingTopicsOfExamIdAsync(
+        Guid examId
+    )
+    {
+        var getReadingTopicsResult = await _examsRepository.GetExamReadingTopicsAsync(examId);
+        if (getReadingTopicsResult.IsFailed)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get reading topics of ExamID",
+                examId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo($"get reading topics of ExamID: {examId}")
+            );
+        }
+
+        return _examMapper.MapExamToExamHasReadingTopicsGetRequestDto(getReadingTopicsResult.Value);
     }
 }

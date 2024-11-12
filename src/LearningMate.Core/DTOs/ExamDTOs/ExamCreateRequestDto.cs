@@ -1,4 +1,4 @@
-namespace LearningMate.Core.DTOs.Exam;
+namespace LearningMate.Core.DTOs.ExamDTOs;
 
 public class ExamCreateRequestDto
 {

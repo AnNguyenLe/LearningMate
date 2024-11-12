@@ -1,6 +1,6 @@
-namespace LearningMate.Core.DTOs.Exam;
+namespace LearningMate.Core.DTOs.ExamDTOs;
 
-public class ExamOverviewGetResponseDto
+public class ExamCreateResponseDto
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }

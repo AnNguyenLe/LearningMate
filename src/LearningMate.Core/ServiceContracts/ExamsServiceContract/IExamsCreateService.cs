@@ -1,5 +1,5 @@
 using FluentResults;
-using LearningMate.Core.DTOs.Exam;
+using LearningMate.Core.DTOs.ExamDTOs;
 
 namespace LearningMate.Core.ServiceContracts.ExamsServiceContract;
 

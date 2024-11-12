@@ -77,13 +77,13 @@ public class ExamsRepository(
         using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
         var sqlQuery = """
                 SELECT 
-                    e.id as exam_id, e.title as exam_title, e.start_time, e.submission_time,
-                    rt.id as topic_id, rt.category, rt.title as topic_title, rt.content, rt.score_band,
-                    rtq.id as question_id, rtq.question, rtq.serialzied_answer_options
+                    e.id as id, e.title as title, e.start_time, e.submission_time,
+                    rt.id as id, rt.category, rt.title as title, rt.content, rt.score_band,
+                    rtq.id as id, rtq.question, rtq.serialized_answer_options
                 FROM exams e
                 LEFT JOIN reading_topics rt ON rt.exam_id = e.id
-                LEFT JOIN reading_topic_questions ON rtq.topic_id = rt.id
-                WHERE e.id = @examId
+                LEFT JOIN reading_topic_questions rtq ON rtq.topic_id = rt.id
+                WHERE e.id = @examId;
             """;
 
         var queryResult = await dbConnection.QueryAsync<
@@ -117,7 +117,7 @@ public class ExamsRepository(
                 return exam;
             },
             new { examId },
-            splitOn: "topic_id, question_id"
+            splitOn: "id"
         );
 
         var exam = queryResult.FirstOrDefault();

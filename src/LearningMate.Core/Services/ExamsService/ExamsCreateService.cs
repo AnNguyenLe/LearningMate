@@ -1,5 +1,5 @@
 using FluentResults;
-using LearningMate.Core.DTOs.Exam;
+using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Domain.Entities;
