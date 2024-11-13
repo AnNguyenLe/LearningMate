@@ -7,8 +7,6 @@ public static class CommonErrorMessages
 
     public static string FailedTo(string action) => $"Failed to {action}.";
 
-    public const string FailedToCreate = "Failed to create {entityName}.";
-
     public static string FieldCannotBeNull(string fieldName) => $"{fieldName} cannot be null.";
 
     public static string FieldCannotBeEmpty(string fieldName) => $"{fieldName} cannot be empty.";

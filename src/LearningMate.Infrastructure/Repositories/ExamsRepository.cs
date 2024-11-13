@@ -49,7 +49,8 @@ public class ExamsRepository(
 
         if (totalAffectedRows == 0)
         {
-            return new ProblemDetailsError("Add new campaign failed.");
+            _logger.LogWarning(CommonLoggingMessages.FailedToCreate, "new exam");
+            return new ProblemDetailsError(CommonErrorMessages.FailedTo("create new exam"));
         }
 
         return totalAffectedRows;
@@ -79,7 +80,7 @@ public class ExamsRepository(
                 SELECT 
                     e.id as id, e.title as title, e.start_time, e.submission_time,
                     rt.id as id, rt.category, rt.title as title, rt.content, rt.score_band,
-                    rtq.id as id, rtq.question, rtq.serialized_answer_options
+                    rtq.id as id, rtq.content, rtq.serialized_answer_options
                 FROM exams e
                 LEFT JOIN reading_topics rt ON rt.exam_id = e.id
                 LEFT JOIN reading_topic_questions rtq ON rtq.topic_id = rt.id

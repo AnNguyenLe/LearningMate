@@ -6,5 +6,5 @@ public class ExamHasReadingTopicsGetRequestDto
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }
-    public List<ReadingTopicTestRequestDto>? ReadingTopics { get; set; }
+    public List<ReadingTopicTestResponseDto>? ReadingTopics { get; set; }
 }

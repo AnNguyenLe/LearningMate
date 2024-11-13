@@ -2,6 +2,7 @@ using FluentResults;
 using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
+using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -21,7 +22,7 @@ public partial class ExamsService
 
         if (createResult.IsFailed)
         {
-            _logger.LogWarning(CommonErrorMessages.FailedToCreate, nameof(Exam));
+            _logger.LogWarning(CommonLoggingMessages.FailedToCreate, nameof(Exam));
             return new ProblemDetailsError(
                 CommonErrorMessages.UnexpectedErrorHappenedDuringProcess(createExamText)
             );
@@ -30,7 +31,7 @@ public partial class ExamsService
         var totalAffectedRows = createResult.ValueOrDefault;
         if (totalAffectedRows == 0)
         {
-            _logger.LogWarning(CommonErrorMessages.FailedToCreate, nameof(Exam));
+            _logger.LogWarning(CommonLoggingMessages.FailedToCreate, nameof(Exam));
             return new ProblemDetailsError(CommonErrorMessages.FailedTo(createExamText));
         }
 

@@ -1,6 +1,7 @@
 using LearningMate.Core.Common.ExtensionMethods;
 using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ErrorMessages;
+using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,14 +37,14 @@ public partial class ExamController
 
         if (createExamResult.IsFailed || createExamResult.ValueOrDefault is null)
         {
-            _logger.LogWarning(CommonErrorMessages.FailedToCreate, nameof(Exam));
+            _logger.LogWarning(CommonLoggingMessages.FailedToCreate, nameof(Exam));
             return createExamResult.Errors.ToDetailedBadRequest();
         }
 
         var exam = createExamResult.Value;
 
         return CreatedAtRoute(
-            nameof(ExamRetrieveAction),
+            nameof(RetriveExamOverview),
             new { id = exam.Id },
             createExamResult.Value
         );

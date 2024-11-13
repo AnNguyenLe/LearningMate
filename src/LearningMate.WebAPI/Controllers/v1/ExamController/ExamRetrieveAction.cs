@@ -7,10 +7,10 @@ namespace LearningMate.WebAPI.Controllers.v1.ExamController;
 
 public partial class ExamController
 {
-    [HttpGet("exam/{id}", Name = nameof(ExamRetrieveAction))]
+    [HttpGet("exam/{id}", Name = nameof(RetriveExamOverview))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ExamOverviewGetResponseDto>> ExamRetrieveAction(
+    public async Task<ActionResult<ExamOverviewGetResponseDto>> RetriveExamOverview(
         [FromRoute] string id
     )
     {
@@ -29,12 +29,12 @@ public partial class ExamController
         return getExamResult.Value;
     }
 
-    [HttpGet("exam/{id}/reading", Name = nameof(ExamReadingTopicsRetrieveAction))]
+    [HttpGet("exam/{id}/reading", Name = nameof(RetrieveExamReadingTopics))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<
-        ActionResult<ExamHasReadingTopicsGetRequestDto>
-    > ExamReadingTopicsRetrieveAction([FromRoute] string id)
+    public async Task<ActionResult<ExamHasReadingTopicsGetRequestDto>> RetrieveExamReadingTopics(
+        [FromRoute] string id
+    )
     {
         if (!Guid.TryParse(id, out var examId))
         {

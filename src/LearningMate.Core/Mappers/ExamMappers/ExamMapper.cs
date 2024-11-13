@@ -79,7 +79,7 @@ public partial class ExamMapper
     [MapperIgnoreSource(nameof(ReadingTopic.ExamId))]
     [MapperIgnoreSource(nameof(ReadingTopic.Exam))]
     [MapperIgnoreSource(nameof(ReadingTopic.Score))]
-    private partial ReadingTopicTestRequestDto ReadingTopicToReadingTopicTestRequestDto(
+    private partial ReadingTopicTestResponseDto ReadingTopicToReadingTopicTestResponseDto(
         ReadingTopic readingTopic
     );
 
@@ -134,7 +134,7 @@ public partial class ExamMapper
 
         var dto = ExamToExamHasReadingTopicsGetRequestDto(exam);
         dto.ReadingTopics = exam
-            .ReadingTopics.Select(ReadingTopicToReadingTopicTestRequestDto)
+            .ReadingTopics.Select(ReadingTopicToReadingTopicTestResponseDto)
             .ToList();
         return dto;
     }
