@@ -65,14 +65,14 @@ public partial class ExamMapper
     );
 
     [MapperIgnoreSource(nameof(MultipleChoiceAnswerOption.IsCorrectAnswer))]
-    private partial MultipleChoiceAnswerOptionTestRequestDto MultipleChoiceAnswerOptionToMultipleChoiceAnswerOptionTestRequestDto(
+    private partial MultipleChoiceAnswerOptionTestResponseDto MultipleChoiceAnswerOptionToMultipleChoiceAnswerOptionTestRequestDto(
         MultipleChoiceAnswerOption option
     );
 
     [MapperIgnoreSource(nameof(ReadingTopicQuestion.SerializedAnswerOptions))]
     [MapperIgnoreSource(nameof(ReadingTopicQuestion.TopicId))]
     [MapperIgnoreSource(nameof(ReadingTopicQuestion.Topic))]
-    private partial MultipleChoiceQuestionTestRequestDto ReadingTopicQuestionToMultipleChoiceQuestionTestRequestDto(
+    private partial MultipleChoiceQuestionTestResponseDto ReadingTopicQuestionToMultipleChoiceQuestionTestResponseDto(
         ReadingTopicQuestion question
     );
 

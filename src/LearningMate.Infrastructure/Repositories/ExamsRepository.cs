@@ -56,6 +56,23 @@ public class ExamsRepository(
         return totalAffectedRows;
     }
 
+    public async Task<Result<bool>> CheckExamExists(Guid examId)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = "SELECT COUNT(DISTINCT 1) from exams WHERE id = @examId";
+        var isExist = dbConnection.ExecuteScalar<bool>(sqlQuery, new { examId });
+
+        if (isExist == false)
+        {
+            _logger.LogWarning(CommonLoggingMessages.RecordNotFoundWithId, nameof(Exam), examId);
+            return new ProblemDetailsError(
+                CommonErrorMessages.RecordNotFoundWithId(nameof(Exam), examId)
+            );
+        }
+
+        return isExist;
+    }
+
     public async Task<Result<Exam>> GetExamOverviewAsync(Guid examId)
     {
         var queryResult = await _dbContext.Exams.FirstOrDefaultAsync(exam => exam.Id == examId);

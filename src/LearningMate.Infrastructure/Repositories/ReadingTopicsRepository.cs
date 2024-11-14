@@ -54,4 +54,25 @@ public class ReadingTopicsRepository(
 
         return totalAffectedRows;
     }
+
+    public async Task<Result<bool>> CheckReadingTopicExistsAsync(Guid topicId)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = "SELECT COUNT(DISTINCT 1) from reading_topics WHERE id=@topicId";
+        var isExist = dbConnection.ExecuteScalar<bool>(sqlQuery, new { topicId });
+
+        if (isExist == false)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.RecordNotFoundWithId,
+                nameof(ReadingTopic),
+                topicId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.RecordNotFoundWithId(nameof(ReadingTopic), topicId)
+            );
+        }
+
+        return isExist;
+    }
 }

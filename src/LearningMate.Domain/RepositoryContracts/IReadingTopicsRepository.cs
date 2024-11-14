@@ -5,5 +5,6 @@ namespace LearningMate.Domain.RepositoryContracts;
 
 public interface IReadingTopicsRepository
 {
+    Task<Result<bool>> CheckReadingTopicExistsAsync(Guid topicId);
     Task<Result<int>> AddTopicAsync(ReadingTopic topic);
 }

@@ -16,4 +16,7 @@ public static class CommonErrorMessages
 
     public static string UnexpectedErrorHappenedDuringProcess(string processName) =>
         $"Unexpected error happened during {processName}. Please contact the support team.";
+
+    public static string RecordNotFoundWithId(string recordType, Guid recordId) =>
+        $"{recordType} not found. {recordType} ID: {recordId}";
 }

@@ -9,5 +9,5 @@ public class ReadingTopicTestResponseDto
     public string? Title { get; set; }
     public string? Content { get; set; }
     public double? ScoreBand { get; set; }
-    public List<MultipleChoiceQuestionTestRequestDto>? Questions { get; set; }
+    public List<MultipleChoiceQuestionTestResponseDto>? Questions { get; set; }
 }

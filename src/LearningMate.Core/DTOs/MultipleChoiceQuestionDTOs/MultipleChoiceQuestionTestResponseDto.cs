@@ -1,11 +1,10 @@
 using LearningMate.Core.DTOs.MultipleChoiceAnswerOptionDTOs;
-using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
 
 namespace LearningMate.Core.DTOs.MultipleChoiceQuestionDTOs;
 
-public class MultipleChoiceQuestionTestRequestDto
+public class MultipleChoiceQuestionTestResponseDto
 {
     public Guid Id { get; set; }
     public string? Content { get; set; }
-    public List<MultipleChoiceAnswerOptionTestRequestDto>? AnswerOptions { get; set; }
+    public List<MultipleChoiceAnswerOptionTestResponseDto>? AnswerOptions { get; set; }
 }

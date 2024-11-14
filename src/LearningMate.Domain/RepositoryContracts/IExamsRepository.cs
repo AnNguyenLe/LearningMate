@@ -5,6 +5,7 @@ namespace LearningMate.Domain.RepositoryContracts;
 
 public interface IExamsRepository
 {
+    Task<Result<bool>> CheckExamExists(Guid examId);
     Task<Result<int>> AddExamAsync(Exam exam);
     Task<Result<Exam>> GetExamOverviewAsync(Guid examId);
     Task<Result<Exam>> GetExamReadingTopicsAsync(Guid examId);

@@ -3,6 +3,8 @@ using LearningMate.Core.DTOs.ReadingTopicDTOs;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
+using LearningMate.Domain.Entities;
+using LearningMate.Domain.Entities.Reading;
 using Microsoft.Extensions.Logging;
 
 namespace LearningMate.Core.Services.ReadingTopicsService;
@@ -13,7 +15,26 @@ public partial class ReadingTopicsService
         ReadingTopicCreateRequestDto createRequestDto
     )
     {
-        var topic = _readingTopicMapper.MapReadingTopicCreateRequestDtoToReadingTopic(createRequestDto);
+        var examId = createRequestDto.ExamId;
+        if (examId is null)
+        {
+            return new ProblemDetailsError(
+                CommonErrorMessages.FieldCannotBeNull(nameof(ReadingTopic.ExamId))
+            );
+        }
+
+        var checkExistResult = await _examsRepository.CheckExamExists(examId.Value);
+
+        if (checkExistResult.IsFailed)
+        {
+            return new ProblemDetailsError(
+                CommonErrorMessages.RecordNotFoundWithId(nameof(Exam), examId.Value)
+            );
+        }
+
+        var topic = _readingTopicMapper.MapReadingTopicCreateRequestDtoToReadingTopic(
+            createRequestDto
+        );
 
         var addResult = await _readingTopicsRepository.AddTopicAsync(topic);
 

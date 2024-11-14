@@ -8,10 +8,12 @@ namespace LearningMate.Core.Services.ReadingTopicsService;
 public partial class ReadingTopicsService(
     ILogger<ReadingTopicsService> logger,
     IReadingTopicsRepository readingTopicsRepository,
-    ReadingTopicMapper readingTopicMapper
+    ReadingTopicMapper readingTopicMapper,
+    IExamsRepository examsRepository
 ) : IReadingTopicsService
 {
     private readonly ILogger<ReadingTopicsService> _logger = logger;
     private readonly IReadingTopicsRepository _readingTopicsRepository = readingTopicsRepository;
     private readonly ReadingTopicMapper _readingTopicMapper = readingTopicMapper;
+    private readonly IExamsRepository _examsRepository = examsRepository;
 }
