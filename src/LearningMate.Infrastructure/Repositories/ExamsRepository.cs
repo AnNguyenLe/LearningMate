@@ -104,6 +104,8 @@ public class ExamsRepository(
                 WHERE e.id = @examId;
             """;
 
+        Dictionary<Guid, Exam> examDict = [];
+
         var queryResult = await dbConnection.QueryAsync<
             Exam,
             ReadingTopic,
@@ -111,57 +113,58 @@ public class ExamsRepository(
             Exam
         >(
             sqlQuery,
-            (exam, topic, question) =>
+            (exam, readingTopic, readingTopicQuestion) =>
             {
-                if (topic is null)
+                // If this exam doesn't exist in the dictionary, add it
+                if (!examDict.TryGetValue(exam.Id, out var examEntry))
                 {
-                    return exam;
+                    examEntry = exam;
+                    examEntry.ReadingTopics = [];
+                    examDict.Add(exam.Id, examEntry);
                 }
 
-                exam.ReadingTopics ??= [];
-                if (!exam.ReadingTopics.Any(readingTopic => readingTopic.Id == topic.Id))
+                // Add the reading topic if it exists
+                if (readingTopic is not null)
                 {
-                    exam.ReadingTopics.Add(topic);
+                    examEntry.ReadingTopics ??= [];
+
+                    var topic = examEntry.ReadingTopics.FirstOrDefault(rt =>
+                        rt.Id == readingTopic.Id
+                    );
+
+                    if (topic == null)
+                    {
+                        topic = readingTopic;
+                        topic.Questions = [];
+                        examEntry.ReadingTopics.Add(topic);
+                    }
+
+                    // Add the question if it exists
+                    if (readingTopicQuestion is not null)
+                    {
+                        topic.Questions ??= [];
+                        topic.Questions.Add(readingTopicQuestion);
+                    }
                 }
 
-                if (question is null)
-                {
-                    return exam;
-                }
-
-                topic.Questions ??= [];
-                topic.Questions.Add(question);
-
-                return exam;
+                return examEntry;
             },
             new { examId },
             splitOn: "id"
         );
 
         var exam = queryResult.FirstOrDefault();
-
         if (exam is null)
         {
-            _logger.LogWarning(
+            _logger.LogError(
                 CommonLoggingMessages.FailedToPerformActionWithId,
-                "get exam including reading topics",
+                "get reading section of exam",
                 examId
             );
             return new ProblemDetailsError(
-                CommonErrorMessages.FailedTo("get exam including reading topics")
+                CommonErrorMessages.FailedTo("get reading section of exam")
             );
         }
-
-        if (exam.ReadingTopics is null)
-        {
-            exam.ReadingTopics = [];
-            return exam;
-        }
-
-        exam.ReadingTopics.ForEach(topic =>
-        {
-            topic.Questions ??= [];
-        });
 
         return exam;
     }
