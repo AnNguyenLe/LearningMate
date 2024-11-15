@@ -10,7 +10,7 @@ namespace LearningMate.WebAPI.Controllers.v1.ReadingTopicController;
 
 public partial class ReadingTopicController
 {
-    [HttpPost("reading/create", Name = nameof(CreateReadingTopic))]
+    [HttpPost("reading/add", Name = nameof(CreateReadingTopic))]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ReadingTopicCreateResponseDto>> CreateReadingTopic(
