@@ -2,9 +2,11 @@ using System.Text.Json;
 using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.DTOs.MultipleChoiceAnswerOptionDTOs;
 using LearningMate.Core.DTOs.MultipleChoiceQuestionDTOs;
+using LearningMate.Core.DTOs.ListeningTopicDTOs;
 using LearningMate.Core.DTOs.ReadingTopicDTOs;
 using LearningMate.Domain.Entities;
 using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
+using LearningMate.Domain.Entities.Listening;
 using LearningMate.Domain.Entities.Reading;
 using Riok.Mapperly.Abstractions;
 
@@ -52,6 +54,87 @@ public partial class ExamMapper
     [MapperIgnoreSource(nameof(Exam.WritingTopics))]
     [MapperIgnoreSource(nameof(Exam.SpeakingTopics))]
     public partial ExamOverviewGetResponseDto MapExamToExamOverviewGetResponseDto(Exam exam);
+
+    [MapperIgnoreSource(nameof(Exam.CreatedAt))]
+    [MapperIgnoreSource(nameof(Exam.StartTime))]
+    [MapperIgnoreSource(nameof(Exam.SubmissionTime))]
+    [MapperIgnoreSource(nameof(Exam.ReadingTopics))]
+    [MapperIgnoreSource(nameof(Exam.WritingTopics))]
+    [MapperIgnoreSource(nameof(Exam.SpeakingTopics))]
+    [MapperIgnoreSource(nameof(Exam.ExamineeExamRelationships))]
+    private partial ExamHasListeningTopicsGetRequestDto ExamToExamHasListeningTopicsGetRequestDto(
+        Exam exam
+    );
+
+    [MapperIgnoreSource(nameof(ListeningTopicQuestion.SerializedAnswerOptions))]
+    [MapperIgnoreSource(nameof(ListeningTopicQuestion.TopicId))]
+    [MapperIgnoreSource(nameof(ListeningTopicQuestion.Topic))]
+    private partial MultipleChoiceQuestionTestResponseDto ListeningTopicQuestionToMultipleChoiceQuestionTestResponseDto(
+        ListeningTopicQuestion question
+    );
+
+    [MapperIgnoreSource(nameof(ListeningTopic.ExamId))]
+    [MapperIgnoreSource(nameof(ListeningTopic.Exam))]
+    [MapperIgnoreSource(nameof(ListeningTopic.Score))]
+    private partial ListeningTopicTestResponseDto ListeningTopicToListeningTopicTestResponseDto(
+        ListeningTopic listeningTopic
+    );
+
+    [UserMapping(Default = false)]
+    public ExamHasListeningTopicsGetRequestDto MapExamToExamHasListeningTopicsGetRequestDto(Exam exam)
+    {
+        if (exam.ListeningTopics is null || exam.ListeningTopics.Count == 0)
+        {
+            exam.ListeningTopics = [];
+        }
+
+        exam.ListeningTopics.ForEach(topic =>
+        {
+            if (topic.Questions is null || topic.Questions.Count == 0)
+            {
+                topic.Questions = [];
+                return;
+            }
+
+            topic.Questions.ForEach(question =>
+            {
+                if (
+                    question.SerializedAnswerOptions is null
+                    || string.IsNullOrWhiteSpace(question.SerializedAnswerOptions)
+                )
+                {
+                    question.AnswerOptions = [];
+                    return;
+                }
+
+                List<MultipleChoiceAnswerOption>? parsedJson;
+                try
+                {
+                    parsedJson = JsonSerializer.Deserialize<List<MultipleChoiceAnswerOption>>(
+                        question.SerializedAnswerOptions
+                    );
+                }
+                catch (JsonException)
+                {
+                    question.AnswerOptions = [];
+                    return;
+                }
+
+                if (parsedJson is null)
+                {
+                    question.AnswerOptions = [];
+                    return;
+                }
+                question.AnswerOptions = parsedJson;
+            });
+        });
+
+        var dto = ExamToExamHasListeningTopicsGetRequestDto(exam);
+        dto.ListeningTopics = exam
+            .ListeningTopics.Select(ListeningTopicToListeningTopicTestResponseDto)
+            .ToList();
+        return dto;
+    }
 
     [MapperIgnoreSource(nameof(Exam.CreatedAt))]
     [MapperIgnoreSource(nameof(Exam.StartTime))]

@@ -4,6 +4,7 @@ using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities;
+using LearningMate.Domain.Entities.Listening;
 using LearningMate.Domain.Entities.Reading;
 using LearningMate.Domain.RepositoryContracts;
 using LearningMate.Infrastructure.Data;
@@ -88,6 +89,85 @@ public class ExamsRepository(
         }
 
         return queryResult;
+    }
+
+    public async Task<Result<Exam>> GetExamListeningTopicsAsync(Guid examId)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = """
+                SELECT 
+                    e.id as id, e.title as title, e.start_time, e.submission_time,
+                    rt.id as id, rt.category, rt.title as title, rt.content, rt.score_band,
+                    rtq.id as id, rtq.content, rtq.serialized_answer_options
+                FROM exams e
+                LEFT JOIN listening_topics rt ON rt.exam_id = e.id
+                LEFT JOIN listening_topic_questions rtq ON rtq.topic_id = rt.id
+                WHERE e.id = @examId;
+            """;
+
+        Dictionary<Guid, Exam> examDict = [];
+
+        var queryResult = await dbConnection.QueryAsync<
+            Exam,
+            ListeningTopic,
+            ListeningTopicQuestion,
+            Exam
+        >(
+            sqlQuery,
+            (exam, listeningTopic, listeningTopicQuestion) =>
+            {
+                // If this exam doesn't exist in the dictionary, add it
+                if (!examDict.TryGetValue(exam.Id, out var examEntry))
+                {
+                    examEntry = exam;
+                    examEntry.ReadingTopics = [];
+                    examDict.Add(exam.Id, examEntry);
+                }
+
+                // Add the listening topic if it exists
+                if (listeningTopic is not null)
+                {
+                    examEntry.ListeningTopics ??= [];
+
+                    var topic = examEntry.ListeningTopics.FirstOrDefault(rt =>
+                        rt.Id == listeningTopic.Id
+                    );
+
+                    if (topic == null)
+                    {
+                        topic = listeningTopic;
+                        topic.Questions = [];
+                        examEntry.ListeningTopics.Add(topic);
+                    }
+
+                    // Add the question if it exists
+                    if (listeningTopicQuestion is not null)
+                    {
+                        topic.Questions ??= [];
+                        topic.Questions.Add(listeningTopicQuestion);
+                    }
+                }
+
+                return examEntry;
+            },
+            new { examId },
+            splitOn: "id"
+        );
+
+        var exam = queryResult.FirstOrDefault();
+        if (exam is null)
+        {
+            _logger.LogError(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get listening section of exam",
+                examId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo("get listening section of exam")
+            );
+        }
+
+        return exam;
     }
 
     public async Task<Result<Exam>> GetExamReadingTopicsAsync(Guid examId)

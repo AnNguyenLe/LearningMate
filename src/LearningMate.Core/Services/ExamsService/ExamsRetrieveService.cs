@@ -27,6 +27,26 @@ public partial class ExamsService
         return _examMapper.MapExamToExamOverviewGetResponseDto(getExamResult.Value);
     }
 
+    public async Task<Result<ExamHasListeningTopicsGetRequestDto>> GetListeningTopicsOfExamIdAsync(
+        Guid examId
+    )
+    {
+        var getListeningTopicsResult = await _examsRepository.GetExamListeningTopicsAsync(examId);
+        if (getListeningTopicsResult.IsFailed)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get listening topics of ExamID",
+                examId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo($"get listening topics of ExamID: {examId}")
+            );
+        }
+
+        return _examMapper.MapExamToExamHasListeningTopicsGetRequestDto(getListeningTopicsResult.Value);
+    }
+
     public async Task<Result<ExamHasReadingTopicsGetRequestDto>> GetReadingTopicsOfExamIdAsync(
         Guid examId
     )
