@@ -1,11 +1,9 @@
-using LearningMate.Domain.Entities.QuestionTypes.Rhetoric;
-
 namespace LearningMate.Domain.Entities.Speaking;
 
-public class SpeakingTopicAnswer : IRhetoricalAnswer
+public class SpeakingTopicAnswer
 {
     public Guid Id { get; set; }
-    public string? Answer { get; set; }
-    public Guid? QuestionId { get; set; }
-    public SpeakingTopic? Question { get; set; }
+    public string? Content { get; set; }
+    public Guid? TopicId { get; set; }
+    public SpeakingTopic? Topic { get; set; }
 }

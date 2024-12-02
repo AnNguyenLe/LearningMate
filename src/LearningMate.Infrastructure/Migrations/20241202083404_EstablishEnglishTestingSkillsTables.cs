@@ -63,8 +63,8 @@ namespace LearningMate.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     title = table.Column<string>(type: "text", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    start_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    submission_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    start_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    submission_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -252,8 +252,8 @@ namespace LearningMate.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    question = table.Column<string>(type: "text", nullable: true),
-                    resources_url = table.Column<string>(type: "text", nullable: true),
+                    content = table.Column<string>(type: "text", nullable: true),
+                    serialized_resources_url = table.Column<string>(type: "text", nullable: true),
                     category = table.Column<string>(type: "text", nullable: true),
                     score_band = table.Column<double>(type: "double precision", nullable: true),
                     score = table.Column<double>(type: "double precision", nullable: true),
@@ -274,8 +274,8 @@ namespace LearningMate.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    question = table.Column<string>(type: "text", nullable: true),
-                    resources_url = table.Column<string>(type: "text", nullable: true),
+                    content = table.Column<string>(type: "text", nullable: true),
+                    serialized_resources_url = table.Column<string>(type: "text", nullable: true),
                     category = table.Column<string>(type: "text", nullable: true),
                     score_band = table.Column<double>(type: "double precision", nullable: true),
                     score = table.Column<double>(type: "double precision", nullable: true),
@@ -296,7 +296,7 @@ namespace LearningMate.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    question = table.Column<string>(type: "text", nullable: true),
+                    content = table.Column<string>(type: "text", nullable: true),
                     serialized_answer_options = table.Column<string>(type: "text", nullable: true),
                     topic_id = table.Column<Guid>(type: "uuid", nullable: true)
                 },
@@ -315,7 +315,7 @@ namespace LearningMate.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    question = table.Column<string>(type: "text", nullable: true),
+                    content = table.Column<string>(type: "text", nullable: true),
                     serialized_answer_options = table.Column<string>(type: "text", nullable: true),
                     topic_id = table.Column<Guid>(type: "uuid", nullable: true)
                 },
@@ -334,15 +334,15 @@ namespace LearningMate.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    answer = table.Column<string>(type: "text", nullable: true),
-                    question_id = table.Column<Guid>(type: "uuid", nullable: true)
+                    content = table.Column<string>(type: "text", nullable: true),
+                    topic_id = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_speaking_topic_answers", x => x.id);
                     table.ForeignKey(
-                        name: "fk_speaking_topic_answers_speaking_topics_question_id",
-                        column: x => x.question_id,
+                        name: "fk_speaking_topic_answers_speaking_topics_topic_id",
+                        column: x => x.topic_id,
                         principalTable: "speaking_topics",
                         principalColumn: "id");
                 });
@@ -352,15 +352,15 @@ namespace LearningMate.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    answer = table.Column<string>(type: "text", nullable: true),
-                    question_id = table.Column<Guid>(type: "uuid", nullable: true)
+                    content = table.Column<string>(type: "text", nullable: true),
+                    topic_id = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_writing_topic_answers", x => x.id);
                     table.ForeignKey(
-                        name: "fk_writing_topic_answers_writing_topics_question_id",
-                        column: x => x.question_id,
+                        name: "fk_writing_topic_answers_writing_topics_topic_id",
+                        column: x => x.topic_id,
                         principalTable: "writing_topics",
                         principalColumn: "id");
                 });
@@ -433,9 +433,9 @@ namespace LearningMate.Infrastructure.Migrations
                 column: "exam_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_speaking_topic_answers_question_id",
+                name: "ix_speaking_topic_answers_topic_id",
                 table: "speaking_topic_answers",
-                column: "question_id");
+                column: "topic_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_speaking_topics_exam_id",
@@ -443,9 +443,9 @@ namespace LearningMate.Infrastructure.Migrations
                 column: "exam_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_writing_topic_answers_question_id",
+                name: "ix_writing_topic_answers_topic_id",
                 table: "writing_topic_answers",
-                column: "question_id");
+                column: "topic_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_writing_topics_exam_id",

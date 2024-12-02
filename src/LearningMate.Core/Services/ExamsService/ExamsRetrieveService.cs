@@ -44,7 +44,9 @@ public partial class ExamsService
             );
         }
 
-        return _examMapper.MapExamToExamHasListeningTopicsGetRequestDto(getListeningTopicsResult.Value);
+        return _examMapper.MapExamToExamHasListeningTopicsGetRequestDto(
+            getListeningTopicsResult.Value
+        );
     }
 
     public async Task<Result<ExamHasReadingTopicsGetRequestDto>> GetReadingTopicsOfExamIdAsync(
@@ -65,5 +67,25 @@ public partial class ExamsService
         }
 
         return _examMapper.MapExamToExamHasReadingTopicsGetRequestDto(getReadingTopicsResult.Value);
+    }
+
+    public async Task<Result<ExamHasWritingTopicsGetRequestDto>> GetWritingTopicsOfExamIdAsync(
+        Guid examId
+    )
+    {
+        var getTopicsResult = await _examsRepository.GetExamWritingTopicsAsync(examId);
+        if (getTopicsResult.IsFailed)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get writing topics of ExamID",
+                examId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo($"get writing topics of ExamID: {examId}")
+            );
+        }
+
+        return _examMapper.MapExamToExamHasWritingTopicsGetRequestDto(getTopicsResult.Value);
     }
 }

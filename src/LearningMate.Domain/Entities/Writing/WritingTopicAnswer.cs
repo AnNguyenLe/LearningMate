@@ -1,11 +1,9 @@
-using LearningMate.Domain.Entities.QuestionTypes.Rhetoric;
-
 namespace LearningMate.Domain.Entities.Writing;
 
-public class WritingTopicAnswer : IRhetoricalAnswer
+public class WritingTopicAnswer
 {
     public Guid Id { get; set; }
-    public string? Answer { get; set; }
-    public Guid? QuestionId { get; set; }
-    public WritingTopic? Question { get; set; }
+    public string? Content { get; set; }
+    public Guid? TopicId { get; set; }
+    public WritingTopic? Topic { get; set; }
 }

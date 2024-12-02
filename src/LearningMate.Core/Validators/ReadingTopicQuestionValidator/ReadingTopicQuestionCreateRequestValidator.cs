@@ -1,7 +1,6 @@
 using FluentValidation;
 using LearningMate.Core.DTOs.ReadingTopicQuestionDTOs;
 using LearningMate.Core.ErrorMessages;
-using LearningMate.Core.Validators.SharedValidators;
 using LearningMate.Domain.Entities.Reading;
 
 namespace LearningMate.Core.Validators.ReadingTopicQuestionValidator;

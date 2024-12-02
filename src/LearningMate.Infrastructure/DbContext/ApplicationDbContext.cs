@@ -137,6 +137,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         // writing_topics table
         modelBuilder.Entity<WritingTopic>().HasKey(wt => wt.Id);
+        modelBuilder.Entity<WritingTopic>().Ignore(wt => wt.ResourcesUrl);
         modelBuilder.Entity<WritingTopic>().Ignore(wt => wt.Answers).Ignore(wt => wt.Exam);
         modelBuilder
             .Entity<WritingTopic>()
@@ -146,15 +147,16 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         // writing_topic_answers table
         modelBuilder.Entity<WritingTopicAnswer>().HasKey(wta => wta.Id);
-        modelBuilder.Entity<WritingTopicAnswer>().Ignore(wta => wta.Question);
+        modelBuilder.Entity<WritingTopicAnswer>().Ignore(wta => wta.Topic);
         modelBuilder
             .Entity<WritingTopicAnswer>()
-            .HasOne(wta => wta.Question)
+            .HasOne(wta => wta.Topic)
             .WithMany(question => question.Answers)
-            .HasForeignKey(wta => wta.QuestionId);
+            .HasForeignKey(wta => wta.TopicId);
 
         // speaking_topics table
         modelBuilder.Entity<SpeakingTopic>().HasKey(st => st.Id);
+        modelBuilder.Entity<SpeakingTopic>().Ignore(st => st.ResourcesUrl);
         modelBuilder.Entity<SpeakingTopic>().Ignore(st => st.Answers).Ignore(st => st.Exam);
         modelBuilder
             .Entity<SpeakingTopic>()
@@ -164,11 +166,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         // speaking_topic_answers table
         modelBuilder.Entity<SpeakingTopicAnswer>().HasKey(sta => sta.Id);
-        modelBuilder.Entity<SpeakingTopicAnswer>().Ignore(sta => sta.Question);
+        modelBuilder.Entity<SpeakingTopicAnswer>().Ignore(sta => sta.Topic);
         modelBuilder
             .Entity<SpeakingTopicAnswer>()
-            .HasOne(sta => sta.Question)
+            .HasOne(sta => sta.Topic)
             .WithMany(question => question.Answers)
-            .HasForeignKey(sta => sta.QuestionId);
+            .HasForeignKey(sta => sta.TopicId);
     }
 }

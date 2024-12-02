@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LearningMate.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241112145820_ChangeColumnQuestionToContent")]
-    partial class ChangeColumnQuestionToContent
+    [Migration("20241202083404_EstablishEnglishTestingSkillsTables")]
+    partial class EstablishEnglishTestingSkillsTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,17 +240,13 @@ namespace LearningMate.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("category");
 
+                    b.Property<string>("Content")
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
                     b.Property<Guid?>("ExamId")
                         .HasColumnType("uuid")
                         .HasColumnName("exam_id");
-
-                    b.Property<string>("Question")
-                        .HasColumnType("text")
-                        .HasColumnName("question");
-
-                    b.Property<string>("ResourcesUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("resources_url");
 
                     b.Property<double?>("Score")
                         .HasColumnType("double precision")
@@ -259,6 +255,10 @@ namespace LearningMate.Infrastructure.Migrations
                     b.Property<double?>("ScoreBand")
                         .HasColumnType("double precision")
                         .HasColumnName("score_band");
+
+                    b.Property<string>("SerializedResourcesUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("serialized_resources_url");
 
                     b.HasKey("Id")
                         .HasName("pk_speaking_topics");
@@ -276,19 +276,19 @@ namespace LearningMate.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Answer")
+                    b.Property<string>("Content")
                         .HasColumnType("text")
-                        .HasColumnName("answer");
+                        .HasColumnName("content");
 
-                    b.Property<Guid?>("QuestionId")
+                    b.Property<Guid?>("TopicId")
                         .HasColumnType("uuid")
-                        .HasColumnName("question_id");
+                        .HasColumnName("topic_id");
 
                     b.HasKey("Id")
                         .HasName("pk_speaking_topic_answers");
 
-                    b.HasIndex("QuestionId")
-                        .HasDatabaseName("ix_speaking_topic_answers_question_id");
+                    b.HasIndex("TopicId")
+                        .HasDatabaseName("ix_speaking_topic_answers_topic_id");
 
                     b.ToTable("speaking_topic_answers", (string)null);
                 });
@@ -304,17 +304,13 @@ namespace LearningMate.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("category");
 
+                    b.Property<string>("Content")
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
                     b.Property<Guid?>("ExamId")
                         .HasColumnType("uuid")
                         .HasColumnName("exam_id");
-
-                    b.Property<string>("Question")
-                        .HasColumnType("text")
-                        .HasColumnName("question");
-
-                    b.Property<string>("ResourcesUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("resources_url");
 
                     b.Property<double?>("Score")
                         .HasColumnType("double precision")
@@ -323,6 +319,10 @@ namespace LearningMate.Infrastructure.Migrations
                     b.Property<double?>("ScoreBand")
                         .HasColumnType("double precision")
                         .HasColumnName("score_band");
+
+                    b.Property<string>("SerializedResourcesUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("serialized_resources_url");
 
                     b.HasKey("Id")
                         .HasName("pk_writing_topics");
@@ -340,19 +340,19 @@ namespace LearningMate.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Answer")
+                    b.Property<string>("Content")
                         .HasColumnType("text")
-                        .HasColumnName("answer");
+                        .HasColumnName("content");
 
-                    b.Property<Guid?>("QuestionId")
+                    b.Property<Guid?>("TopicId")
                         .HasColumnType("uuid")
-                        .HasColumnName("question_id");
+                        .HasColumnName("topic_id");
 
                     b.HasKey("Id")
                         .HasName("pk_writing_topic_answers");
 
-                    b.HasIndex("QuestionId")
-                        .HasDatabaseName("ix_writing_topic_answers_question_id");
+                    b.HasIndex("TopicId")
+                        .HasDatabaseName("ix_writing_topic_answers_topic_id");
 
                     b.ToTable("writing_topic_answers", (string)null);
                 });
@@ -691,12 +691,12 @@ namespace LearningMate.Infrastructure.Migrations
 
             modelBuilder.Entity("LearningMate.Domain.Entities.Speaking.SpeakingTopicAnswer", b =>
                 {
-                    b.HasOne("LearningMate.Domain.Entities.Speaking.SpeakingTopic", "Question")
+                    b.HasOne("LearningMate.Domain.Entities.Speaking.SpeakingTopic", "Topic")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .HasConstraintName("fk_speaking_topic_answers_speaking_topics_question_id");
+                        .HasForeignKey("TopicId")
+                        .HasConstraintName("fk_speaking_topic_answers_speaking_topics_topic_id");
 
-                    b.Navigation("Question");
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("LearningMate.Domain.Entities.Writing.WritingTopic", b =>
@@ -711,12 +711,12 @@ namespace LearningMate.Infrastructure.Migrations
 
             modelBuilder.Entity("LearningMate.Domain.Entities.Writing.WritingTopicAnswer", b =>
                 {
-                    b.HasOne("LearningMate.Domain.Entities.Writing.WritingTopic", "Question")
+                    b.HasOne("LearningMate.Domain.Entities.Writing.WritingTopic", "Topic")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .HasConstraintName("fk_writing_topic_answers_writing_topics_question_id");
+                        .HasForeignKey("TopicId")
+                        .HasConstraintName("fk_writing_topic_answers_writing_topics_topic_id");
 
-                    b.Navigation("Question");
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

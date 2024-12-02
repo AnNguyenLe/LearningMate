@@ -1,8 +1,3 @@
-
-
 namespace LearningMate.Core.ServiceContracts.ReadingTopicsServiceContract;
 
-public interface IReadingTopicsService: IReadingTopicsCreateService
-{
-
-}
+public interface IReadingTopicsService : IReadingTopicsCreateService { }

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Dapper;
 using FluentResults;
 using LearningMate.Core.ErrorMessages;
@@ -6,6 +7,7 @@ using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities;
 using LearningMate.Domain.Entities.Listening;
 using LearningMate.Domain.Entities.Reading;
+using LearningMate.Domain.Entities.Writing;
 using LearningMate.Domain.RepositoryContracts;
 using LearningMate.Infrastructure.Data;
 using LearningMate.Infrastructure.DbContext;
@@ -91,17 +93,79 @@ public class ExamsRepository(
         return queryResult;
     }
 
+    public async Task<Result<Exam>> GetExamWritingTopicsAsync(Guid examId)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = """
+                SELECT 
+                    e.id as id, e.title as title, e.start_time, e.submission_time,
+                    wt.id as id, wt.content, wt.serialized_resources_url as serialized_resources_url, wt.category, wt.score_band
+                FROM exams e
+                LEFT JOIN writing_topics wt ON wt.exam_id = e.id
+                WHERE e.id = @examId;
+            """;
+
+        Exam? examResult = null;
+
+        var queryResult = await dbConnection.QueryAsync<Exam, WritingTopic, Exam>(
+            sqlQuery,
+            (exam, topic) =>
+            {
+                if (examResult is null)
+                {
+                    examResult = exam;
+                    examResult.WritingTopics = [];
+                }
+
+                if (topic is not null)
+                {
+                    examResult.WritingTopics ??= [];
+                    topic.ResourcesUrl = JsonSerializer.Deserialize<List<string>>(
+                        topic.SerializedResourcesUrl ?? "[]"
+                    );
+                    var existingTopic = examResult.WritingTopics.FirstOrDefault(wt =>
+                        wt.Id == topic.Id
+                    );
+
+                    if (existingTopic is null)
+                    {
+                        examResult.WritingTopics.Add(topic);
+                    }
+                }
+
+                return examResult;
+            },
+            new { examId },
+            splitOn: "id"
+        );
+
+        var exam = queryResult.FirstOrDefault();
+        if (exam is null)
+        {
+            _logger.LogError(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get reading section of exam",
+                examId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo("get reading section of exam")
+            );
+        }
+
+        return exam;
+    }
+
     public async Task<Result<Exam>> GetExamListeningTopicsAsync(Guid examId)
     {
         using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
         var sqlQuery = """
                 SELECT 
                     e.id as id, e.title as title, e.start_time, e.submission_time,
-                    rt.id as id, rt.category, rt.title as title, rt.content, rt.score_band,
-                    rtq.id as id, rtq.content, rtq.serialized_answer_options
+                    lt.id as id, lt.category, lt.title as title, lt.content, lt.score_band,
+                    ltq.id as id, ltq.content, ltq.serialized_answer_options
                 FROM exams e
-                LEFT JOIN listening_topics rt ON rt.exam_id = e.id
-                LEFT JOIN listening_topic_questions rtq ON rtq.topic_id = rt.id
+                LEFT JOIN listening_topics lt ON lt.exam_id = e.id
+                LEFT JOIN listening_topic_questions ltq ON ltq.topic_id = lt.id
                 WHERE e.id = @examId;
             """;
 
