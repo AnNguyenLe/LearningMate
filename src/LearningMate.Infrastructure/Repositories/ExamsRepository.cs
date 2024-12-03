@@ -8,6 +8,7 @@ using LearningMate.Domain.Entities;
 using LearningMate.Domain.Entities.Listening;
 using LearningMate.Domain.Entities.Reading;
 using LearningMate.Domain.Entities.Writing;
+using LearningMate.Domain.Entities.Speaking;
 using LearningMate.Domain.RepositoryContracts;
 using LearningMate.Infrastructure.Data;
 using LearningMate.Infrastructure.DbContext;
@@ -152,6 +153,61 @@ public class ExamsRepository(
             );
         }
 
+        return exam;
+    }
+
+    public async Task<Result<Exam>> GetExamSpeakingTopicsAsync(Guid examId)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = """
+                SELECT 
+                    e.id as id, e.title as title, e.start_time, e.submission_time,
+                    st.id as id, st.content, st.serialized_resources_url as serialized_resources_url, st.category, st.score_band
+                FROM exams e
+                LEFT JOIN speaking_topics st ON st.exam_id = e.id
+                WHERE e.id = @examId;
+            """;
+        Exam? examResult = null;
+        var queryResult = await dbConnection.QueryAsync<Exam, SpeakingTopic, Exam>(
+            sqlQuery,
+            (exam, topic) =>
+            {
+                if (examResult is null)
+                {
+                    examResult = exam;
+                    examResult.SpeakingTopics = [];
+                }
+                if (topic is not null)
+                {
+                    examResult.SpeakingTopics ??= [];
+                    topic.ResourcesUrl = JsonSerializer.Deserialize<List<string>>(
+                        topic.SerializedResourcesUrl ?? "[]"
+                    );
+                    var existingTopic = examResult.SpeakingTopics.FirstOrDefault(st =>
+                        st.Id == topic.Id
+                    );
+                    if (existingTopic is null)
+                    {
+                        examResult.SpeakingTopics.Add(topic);
+                    }
+                }
+                return examResult;
+            },
+            new { examId },
+            splitOn: "id"
+        );
+        var exam = queryResult.FirstOrDefault();
+        if (exam is null)
+        {
+            _logger.LogError(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get speaking section of exam",
+                examId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo("get speaking section of exam")
+            );
+        }
         return exam;
     }
 

@@ -88,4 +88,23 @@ public partial class ExamsService
 
         return _examMapper.MapExamToExamHasWritingTopicsGetRequestDto(getTopicsResult.Value);
     }
+
+    public async Task<Result<ExamHasSpeakingTopicsGetRequestDto>> GetSpeakingTopicsOfExamIdAsync(
+        Guid examId
+    )
+    {
+        var getTopicsResult = await _examsRepository.GetExamSpeakingTopicsAsync(examId);
+        if (getTopicsResult.IsFailed)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get speaking topics of ExamID",
+                examId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo($"get speaking topics of ExamID: {examId}")
+            );
+        }
+        return _examMapper.MapExamToExamHasSpeakingTopicsGetRequestDto(getTopicsResult.Value);
+    }
 }

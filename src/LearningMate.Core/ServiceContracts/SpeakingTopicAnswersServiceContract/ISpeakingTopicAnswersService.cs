@@ -1,0 +1,3 @@
+namespace LearningMate.Core.ServiceContracts.SpeakingTopicAnswersServiceContract;
+
+public interface ISpeakingTopicAnswersService : ISpeakingTopicAnswersCreateService { }

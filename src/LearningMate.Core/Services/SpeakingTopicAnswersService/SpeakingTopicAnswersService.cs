@@ -1,5 +1,5 @@
 
-using LearningMate.Core.ServiceContracts.SpeakingTopicAnswerServiceContract;
+using LearningMate.Core.ServiceContracts.SpeakingTopicAnswersServiceContract;
 
 namespace LearningMate.Core.Services.SpeakingTopicAnswersService;
 
