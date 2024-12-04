@@ -51,6 +51,28 @@ public partial class ExamController
         return getTopicsResult.Value;
     }
 
+    [HttpGet("exam/{id}/speaking", Name = nameof(RetrieveExamSpeakingTopics))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ExamHasSpeakingTopicsGetRequestDto>> RetrieveExamSpeakingTopics(
+        [FromRoute] string id
+    )
+    {
+        if (!Guid.TryParse(id, out var examId))
+        {
+            return BadRequestProblemDetails(CommonErrorMessages.InvalidIdFormat);
+        }
+
+        var getTopicsResult = await _examsService.GetSpeakingTopicsOfExamIdAsync(examId);
+
+        if (getTopicsResult.IsFailed)
+        {
+            return getTopicsResult.Errors.ToDetailedBadRequest();
+        }
+
+        return getTopicsResult.Value;
+    }
+
     [HttpGet("exam/{id}/listening", Name = nameof(RetrieveExamListeningTopics))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

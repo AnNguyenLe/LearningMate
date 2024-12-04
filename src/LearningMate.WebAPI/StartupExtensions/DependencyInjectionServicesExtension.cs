@@ -15,7 +15,7 @@ using LearningMate.Core.ServiceContracts.ListeningTopicQuestionsServiceContract;
 using LearningMate.Core.ServiceContracts.ListeningTopicsServiceContract;
 using LearningMate.Core.ServiceContracts.ReadingTopicQuestionsServiceContract;
 using LearningMate.Core.ServiceContracts.ReadingTopicsServiceContract;
-using LearningMate.Core.ServiceContracts.SpeakingTopicAnswerServiceContract;
+using LearningMate.Core.ServiceContracts.SpeakingTopicAnswersServiceContract;
 using LearningMate.Core.ServiceContracts.SpeakingTopicsServiceContract;
 using LearningMate.Core.ServiceContracts.WritingTopicAnswersServiceContract;
 using LearningMate.Core.ServiceContracts.WritingTopicsServiceContract;
