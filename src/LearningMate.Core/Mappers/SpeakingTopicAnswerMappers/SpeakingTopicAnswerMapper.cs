@@ -9,7 +9,7 @@ public partial class SpeakingTopicAnswerMapper
 {
     [MapperIgnoreTarget(nameof(SpeakingTopicAnswer.Id))]
     [MapperIgnoreTarget(nameof(SpeakingTopicAnswer.Topic))]
-    public partial SpeakingTopicAnswer SpeakingTopicAnswerCreateRequestDtoToSpeakingTopicAnswer(
+    private partial SpeakingTopicAnswer SpeakingTopicAnswerCreateRequestDtoToSpeakingTopicAnswer(
         SpeakingTopicAnswerCreateRequestDto dto
     );
     public SpeakingTopicAnswer MapSpeakingTopicAnswerCreateRequestDtoToSpeakingTopicAnswer(

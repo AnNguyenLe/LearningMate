@@ -13,7 +13,7 @@ public partial class SpeakingTopicMapper
     [MapperIgnoreTarget(nameof(SpeakingTopic.Score))]
     [MapperIgnoreTarget(nameof(SpeakingTopic.SerializedResourcesUrl))]
     [MapperIgnoreTarget(nameof(SpeakingTopic.Answers))]
-    public partial SpeakingTopic SpeakingTopicCreateRequestDtoToSpeakingTopic(
+    private partial SpeakingTopic SpeakingTopicCreateRequestDtoToSpeakingTopic(
         SpeakingTopicCreateRequestDto dto
     );
     public SpeakingTopic MapSpeakingTopicCreateRequestDtoToSpeakingTopic(
