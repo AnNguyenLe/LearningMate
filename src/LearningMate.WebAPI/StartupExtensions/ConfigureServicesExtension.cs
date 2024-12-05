@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using System.Text;
 using Asp.Versioning;
+using LearningMate.AI.ConfigOptions;
 using LearningMate.Core.ConfigurationOptions.AppServer;
 using LearningMate.Core.ConfigurationOptions.Jwt;
 using LearningMate.Core.ConfigurationOptions.Smtp;
@@ -166,6 +167,7 @@ public static class ConfigureServicesExtension
         services.Configure<JwtConfiguration>(configuration.GetSection("Jwt"));
         services.Configure<SmtpConfiguration>(configuration.GetSection("SmtpSettings"));
         services.Configure<MyAppServerConfiguration>(configuration.GetSection("MyAppServer"));
+        services.Configure<GeminiFlashOptions>(configuration.GetSection("GeminiFlashOptions"));
 
         return services;
     }

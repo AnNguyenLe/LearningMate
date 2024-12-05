@@ -27,6 +27,7 @@
     <ProjectReference Include="..\LearningMate.Core\LearningMate.Core.csproj" />
     <ProjectReference Include="..\LearningMate.Infrastructure\LearningMate.Infrastructure.csproj" />
     <ProjectReference Include="..\LearningMate.Domain\LearningMate.Domain.csproj" />
+    <ProjectReference Include="..\LearningMate.AI\LearningMate.AI.csproj" />
   </ItemGroup>
 
 </Project>

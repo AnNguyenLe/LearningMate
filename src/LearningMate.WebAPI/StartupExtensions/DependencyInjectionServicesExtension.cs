@@ -1,3 +1,7 @@
+using LearningMate.AI.ServiceContracts.EnglishSkillsAIAssistedFeedbackServiceContract;
+using LearningMate.AI.ServiceContracts.PromptServiceContract;
+using LearningMate.AI.Services.EnglishSkillsAIAssistedFeedbackService;
+using LearningMate.AI.Services.PromptingService.GoogleGemini;
 using LearningMate.Core.Mappers.ExamMappers;
 using LearningMate.Core.Mappers.ListeningTopicMappers;
 using LearningMate.Core.Mappers.ListeningTopicQuestionMappers;
@@ -87,6 +91,12 @@ public static class DependencyInjectionServicesExtension
         services.TryAddSingleton<SpeakingTopicAnswerMapper>();
         services.TryAddSingleton<WritingTopicMapper>();
         services.TryAddSingleton<WritingTopicAnswerMapper>();
+
+        services.AddScoped<IPromptService, GoogleGeminiPromptService>();
+        services.AddScoped<
+            IEnglishSkillsAIAssistedFeedbackService,
+            EnglishSkillsAIAssistedFeedbackService
+        >();
 
         return services;
     }

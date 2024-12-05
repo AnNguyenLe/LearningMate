@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningMate.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningMate.Domain", "src\LearningMate.Domain\LearningMate.Domain.csproj", "{06AFBECD-750C-478D-AE01-DF17776B68D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningMate.AI", "src\LearningMate.AI\LearningMate.AI.csproj", "{8CDFE4BF-D810-4F0B-AAA2-AE15EF1F7938}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{06AFBECD-750C-478D-AE01-DF17776B68D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06AFBECD-750C-478D-AE01-DF17776B68D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06AFBECD-750C-478D-AE01-DF17776B68D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CDFE4BF-D810-4F0B-AAA2-AE15EF1F7938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDFE4BF-D810-4F0B-AAA2-AE15EF1F7938}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CDFE4BF-D810-4F0B-AAA2-AE15EF1F7938}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CDFE4BF-D810-4F0B-AAA2-AE15EF1F7938}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +50,6 @@ Global
 		{120D6C94-33CB-41A2-8ACA-2D836C27B5A1} = {12EA9DEE-4423-46D4-BEBF-AE577C75040E}
 		{9DCC0A1C-F8CD-4C27-82B1-23EA18055E54} = {12EA9DEE-4423-46D4-BEBF-AE577C75040E}
 		{06AFBECD-750C-478D-AE01-DF17776B68D3} = {12EA9DEE-4423-46D4-BEBF-AE577C75040E}
+		{8CDFE4BF-D810-4F0B-AAA2-AE15EF1F7938} = {12EA9DEE-4423-46D4-BEBF-AE577C75040E}
 	EndGlobalSection
 EndGlobal

@@ -5,7 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
 builder.Host.UseSerilog(
     (context, services, loggerConfiguration) =>
     {
@@ -20,6 +19,8 @@ builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.DependencyInjectionServices(builder.Configuration);
 
 builder.Services.ConfigureValidators();
+
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
