@@ -1,8 +1,7 @@
-
-
 namespace LearningMate.Core.ServiceContracts.ListeningTopicsServiceContract;
 
-public interface IListeningTopicsService: IListeningTopicsCreateService
+public interface IListeningTopicsService
+    : IListeningTopicsCreateService, IListeningTopicsRetrieveService
 {
 
 }

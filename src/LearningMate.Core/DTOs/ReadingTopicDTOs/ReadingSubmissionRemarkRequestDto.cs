@@ -10,10 +10,10 @@ public class ReadingTopicAnsweredQuestion
 {
     public Guid Id { get; set; }
     public string? Content { get; set; }
-    public List<MultipleChoiceSubmittedOption>? AnswerOptions { get; set; }
+    public List<ReadingMultipleChoiceSubmittedOption>? AnswerOptions { get; set; }
 }
 
-public class MultipleChoiceSubmittedOption
+public class ReadingMultipleChoiceSubmittedOption
 {
     public Guid Id { get; set; }
     public string? Content { get; set; }

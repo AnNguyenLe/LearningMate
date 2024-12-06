@@ -1,8 +1,10 @@
+using System.Text.Json;
 using Dapper;
 using FluentResults;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
+using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
 using LearningMate.Domain.Entities.Listening;
 using LearningMate.Domain.RepositoryContracts;
 using LearningMate.Infrastructure.Data;
@@ -74,5 +76,58 @@ public class ListeningTopicsRepository(
         }
 
         return isExist;
+    }
+
+    public async Task<Result<ListeningTopic>> GetListeningTopicById(Guid id)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = """
+                SELECT
+                    lt.id, lt.content,
+                    ltq.id, ltq.content, ltq.serialized_answer_options
+                FROM listening_topics lt
+                LEFT JOIN listening_topic_questions ltq ON lt.id = ltq.topic_id
+                WHERE lt.id = @id;
+            """;
+        ListeningTopic? listeningTopic = null;
+        var queryResult = await dbConnection.QueryAsync<
+            ListeningTopic,
+            ListeningTopicQuestion,
+            ListeningTopic
+        >(
+            sqlQuery,
+            (topic, topicQuestion) =>
+            {
+                listeningTopic ??= topic;
+                if (topicQuestion is not null)
+                {
+                    var answerOptions = JsonSerializer.Deserialize<
+                        List<MultipleChoiceAnswerOption>
+                    >(topicQuestion.SerializedAnswerOptions ?? "[]");
+                    if (answerOptions is not null)
+                    {
+                        topicQuestion.AnswerOptions = answerOptions;
+                    }
+                    listeningTopic.Questions ??= [];
+                    listeningTopic.Questions.Add(topicQuestion);
+                }
+                return listeningTopic;
+            },
+            new { id },
+            splitOn: "id"
+        );
+        var listeningTopicResult = queryResult.FirstOrDefault();
+        if (listeningTopicResult is null)
+        {
+            _logger.LogError(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get listening topic with questions",
+                id
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo("get listening topic with questions")
+            );
+        }
+        return listeningTopicResult;
     }
 }
