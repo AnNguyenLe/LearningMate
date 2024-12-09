@@ -5,7 +5,5 @@ namespace LearningMate.Core.ServiceContracts.ReadingTopicsServiceContract;
 
 public interface IReadingTopicsRetrieveService
 {
-    Task<Result<ReadingTopicSolutionResponseDto>> GetTopicSolutionAsync(
-        Guid id
-    );
+    Task<Result<ReadingTopicSolutionResponseDto>> GetTopicSolutionAsync(Guid id);
 }

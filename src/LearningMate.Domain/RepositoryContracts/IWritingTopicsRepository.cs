@@ -7,4 +7,5 @@ public interface IWritingTopicsRepository
 {
     Task<Result<bool>> CheckReadingTopicExistsAsync(Guid topicId);
     Task<Result<int>> AddTopicAsync(WritingTopic topic);
+    Task<Result<WritingTopic>> GetTopicByIdAsync(Guid topicId);
 }

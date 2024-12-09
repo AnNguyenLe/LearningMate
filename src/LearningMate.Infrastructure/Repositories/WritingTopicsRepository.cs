@@ -58,7 +58,7 @@ public class WritingTopicsRepository(
     public async Task<Result<bool>> CheckReadingTopicExistsAsync(Guid topicId)
     {
         using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
-        var sqlQuery = "SELECT COUNT(DISTINCT 1) from writing_topics WHERE id=@topicId";
+        var sqlQuery = "SELECT COUNT(DISTINCT 1) FROM writing_topics WHERE id=@topicId";
         var isExist = dbConnection.ExecuteScalar<bool>(sqlQuery, new { topicId });
 
         if (isExist == false)
@@ -74,5 +74,29 @@ public class WritingTopicsRepository(
         }
 
         return isExist;
+    }
+
+    public async Task<Result<WritingTopic>> GetTopicByIdAsync(Guid topicId)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = "SELECT * FROM writing_topics WHERE id=@topicId";
+        var queryResult = await dbConnection.QueryFirstOrDefaultAsync<WritingTopic>(
+            sqlQuery,
+            new { topicId }
+        );
+
+        if (queryResult is null)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.RecordNotFoundWithId,
+                nameof(WritingTopic),
+                topicId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.RecordNotFoundWithId(nameof(WritingTopic), topicId)
+            );
+        }
+
+        return queryResult;
     }
 }

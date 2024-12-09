@@ -1,3 +1,5 @@
 namespace LearningMate.Core.ServiceContracts.WritingTopicsServiceContract;
 
-public interface IWritingTopicsService : IWritingTopicsCreateService { }
+public interface IWritingTopicsService
+    : IWritingTopicsCreateService,
+        IWritingTopicsRetrieveService { }
