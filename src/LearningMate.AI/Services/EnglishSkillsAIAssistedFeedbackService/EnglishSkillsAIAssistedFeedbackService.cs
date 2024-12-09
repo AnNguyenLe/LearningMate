@@ -5,6 +5,7 @@ using LearningMate.AI.ServiceContracts.PromptServiceContract;
 using LearningMate.Core.DTOs.ListeningTopicDTOs;
 using LearningMate.Core.DTOs.ReadingTopicDTOs;
 using LearningMate.Core.DTOs.WritingTopicDTOs;
+using LearningMate.Core.DTOs.SpeakingTopicDTOs;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
@@ -94,6 +95,7 @@ public partial class EnglishSkillsAIAssistedFeedbackService(
     IReadingTopicsService readingTopicsService,
     IListeningTopicsService listeningTopicsService,
     IWritingTopicsService writingTopicsService,
+    ISpeakingTopicsService speakingTopicsService,
     IPromptService promptService
 ) : IEnglishSkillsAIAssistedFeedbackService
 {
@@ -101,5 +103,6 @@ public partial class EnglishSkillsAIAssistedFeedbackService(
     private readonly IReadingTopicsService _readingTopicsService = readingTopicsService;
     private readonly IListeningTopicsService _listeningTopicsService = listeningTopicsService;
     private readonly IWritingTopicsService _writingTopicsService = writingTopicsService;
+    private readonly ISpeakingTopicsService _speakingTopicsService = speakingTopicsService;
     private readonly IPromptService _promptService = promptService;
 }

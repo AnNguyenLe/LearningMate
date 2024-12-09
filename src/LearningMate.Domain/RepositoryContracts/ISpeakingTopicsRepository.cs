@@ -7,4 +7,5 @@ public interface ISpeakingTopicsRepository
 {
     Task<Result<bool>> CheckSpeakingTopicExistsAsync(Guid topicId);
     Task<Result<int>> AddTopicAsync(SpeakingTopic topic);
+    Task<Result<SpeakingTopic>> GetTopicByIdAsync(Guid topicId);
 }

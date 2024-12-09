@@ -31,7 +31,7 @@ public partial class EnglishSkillsAIAssistedFeedbackService
             );
         }
 
-        var prompt = GeneratePromptForWritingingTopicFeedback(
+        var prompt = GeneratePromptForWritingTopicFeedback(
             submittedAnswer,
             topicQueryResult.Value
         );
@@ -55,7 +55,7 @@ public partial class EnglishSkillsAIAssistedFeedbackService
         )!;
     }
 
-    private static string GeneratePromptForWritingingTopicFeedback(
+    private static string GeneratePromptForWritingTopicFeedback(
         WritingTopicSubmitRequestDto submittedAnswer,
         WritingTopic topic
     )
