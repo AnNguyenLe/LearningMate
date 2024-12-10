@@ -35,6 +35,6 @@ public partial class WritingTopicController
 
         var topic = addingTopicResult.Value;
 
-        return Created();
+        return CreatedAtAction(nameof(CreateWritingTopic), new { id = topic.Id }, topic.Id);
     }
 }

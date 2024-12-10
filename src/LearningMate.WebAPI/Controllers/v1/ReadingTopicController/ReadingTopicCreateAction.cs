@@ -36,7 +36,7 @@ public partial class ReadingTopicController
 
         var topic = addingTopicResult.Value;
 
-        return Created();
+        return CreatedAtAction(nameof(CreateReadingTopic), new { id = topic.Id }, topic.Id);
     }
 
     [HttpPost("reading/question/add", Name = nameof(CreateReadingTopicQuestion))]

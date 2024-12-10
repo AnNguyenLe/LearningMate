@@ -17,7 +17,9 @@ public partial class ListeningTopicController
         [FromBody] ListeningTopicCreateRequestDto createRequestDto
     )
     {
-        var modelValidationResult = _listeningTopicCreateRequestValidator.Validate(createRequestDto);
+        var modelValidationResult = _listeningTopicCreateRequestValidator.Validate(
+            createRequestDto
+        );
 
         if (!modelValidationResult.IsValid)
         {
@@ -36,15 +38,17 @@ public partial class ListeningTopicController
 
         var topic = addingTopicResult.Value;
 
-        return Created();
+        return CreatedAtAction(nameof(CreateListeningTopic), new { id = topic.Id }, topic.Id);
     }
-    
+
     [HttpPost("listening/question/add", Name = nameof(CreateListeningTopicQuestion))]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<
         ActionResult<ListeningTopicQuestionCreateResponseDto>
-    > CreateListeningTopicQuestion([FromBody] ListeningTopicQuestionCreateRequestDto createRequestDto)
+    > CreateListeningTopicQuestion(
+        [FromBody] ListeningTopicQuestionCreateRequestDto createRequestDto
+    )
     {
         var modelValidationResult = _listeningTopicQuestionCreateRequestValidator.Validate(
             createRequestDto
@@ -63,7 +67,10 @@ public partial class ListeningTopicController
         );
         if (addingResult.IsFailed || addingResult.ValueOrDefault is null)
         {
-            _logger.LogWarning(CommonLoggingMessages.FailedToCreate, nameof(ListeningTopicQuestion));
+            _logger.LogWarning(
+                CommonLoggingMessages.FailedToCreate,
+                nameof(ListeningTopicQuestion)
+            );
             return addingResult.Errors.ToDetailedBadRequest();
         }
 

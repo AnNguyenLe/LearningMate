@@ -4,7 +4,9 @@ using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities.Speaking;
 using Microsoft.AspNetCore.Mvc;
+
 namespace LearningMate.WebAPI.Controllers.v1.SpeakingTopicController;
+
 public partial class SpeakingTopicController
 {
     [HttpPost("speaking/add", Name = nameof(CreateSpeakingTopic))]
@@ -29,6 +31,7 @@ public partial class SpeakingTopicController
             return addingTopicResult.Errors.ToDetailedBadRequest();
         }
         var topic = addingTopicResult.Value;
-        return Created();
+
+        return CreatedAtAction(nameof(CreateSpeakingTopic), new { id = topic.Id }, topic.Id);
     }
 }
