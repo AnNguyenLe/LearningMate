@@ -54,7 +54,7 @@ public class SpeakingTopicsRepository(
     public async Task<Result<bool>> CheckSpeakingTopicExistsAsync(Guid topicId)
     {
         using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
-        var sqlQuery = "SELECT COUNT(DISTINCT 1) from speaking_topics WHERE id=@topicId";
+        var sqlQuery = "SELECT COUNT(DISTINCT 1) FROM speaking_topics WHERE id=@topicId";
         var isExist = dbConnection.ExecuteScalar<bool>(sqlQuery, new { topicId });
         if (isExist == false)
         {
@@ -68,5 +68,27 @@ public class SpeakingTopicsRepository(
             );
         }
         return isExist;
+    }
+
+    public async Task<Result<SpeakingTopic>> GetTopicByIdAsync(Guid topicId)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = "SELECT * FROM speaking_topics WHERE id=@topicId";
+        var queryResult = await dbConnection.QueryFirstOrDefaultAsync<SpeakingTopic>(
+            sqlQuery,
+            new { topicId }
+        );
+        if (queryResult is null)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.RecordNotFoundWithId,
+                nameof(SpeakingTopic),
+                topicId
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.RecordNotFoundWithId(nameof(SpeakingTopic), topicId)
+            );
+        }
+        return queryResult;
     }
 }
