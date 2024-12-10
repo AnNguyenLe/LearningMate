@@ -10,4 +10,5 @@ public interface IExamsRetrieveService
     Task<Result<ExamHasSpeakingTopicsGetRequestDto>> GetSpeakingTopicsOfExamIdAsync(Guid examId);
     Task<Result<ExamHasListeningTopicsGetRequestDto>> GetListeningTopicsOfExamIdAsync(Guid examId);
     Task<Result<ExamHasReadingTopicsGetRequestDto>> GetReadingTopicsOfExamIdAsync(Guid examId);
+    Task<Result<IEnumerable<ExamGetResponseDto>>> GetExams();
 }

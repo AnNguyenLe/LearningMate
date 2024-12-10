@@ -1,12 +1,12 @@
 using System.Text.Json;
 using LearningMate.Core.DTOs.ExamDTOs;
+using LearningMate.Core.DTOs.ListeningTopicDTOs;
 using LearningMate.Core.DTOs.MultipleChoiceAnswerOptionDTOs;
 using LearningMate.Core.DTOs.MultipleChoiceQuestionDTOs;
-using LearningMate.Core.DTOs.ListeningTopicDTOs;
 using LearningMate.Core.DTOs.ReadingTopicDTOs;
 using LearningMate.Domain.Entities;
-using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
 using LearningMate.Domain.Entities.Listening;
+using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
 using LearningMate.Domain.Entities.Reading;
 using Riok.Mapperly.Abstractions;
 
@@ -81,7 +81,9 @@ public partial class ExamMapper
     );
 
     [UserMapping(Default = false)]
-    public ExamHasListeningTopicsGetRequestDto MapExamToExamHasListeningTopicsGetRequestDto(Exam exam)
+    public ExamHasListeningTopicsGetRequestDto MapExamToExamHasListeningTopicsGetRequestDto(
+        Exam exam
+    )
     {
         if (exam.ListeningTopics is null || exam.ListeningTopics.Count == 0)
         {
@@ -221,4 +223,17 @@ public partial class ExamMapper
             .ToList();
         return dto;
     }
+
+    [MapperIgnoreSource(nameof(Exam.StartTime))]
+    [MapperIgnoreSource(nameof(Exam.SubmissionTime))]
+    [MapperIgnoreSource(nameof(Exam.ExamineeExamRelationships))]
+    [MapperIgnoreSource(nameof(Exam.ReadingTopics))]
+    [MapperIgnoreSource(nameof(Exam.ListeningTopics))]
+    [MapperIgnoreSource(nameof(Exam.WritingTopics))]
+    [MapperIgnoreSource(nameof(Exam.SpeakingTopics))]
+    public partial ExamGetResponseDto MapExamToExamGetResponseDto(Exam exam);
+
+    public partial IEnumerable<ExamGetResponseDto> MapExamListToExamGetResponseDtoList(
+        IEnumerable<Exam> exams
+    );
 }

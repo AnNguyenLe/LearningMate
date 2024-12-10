@@ -12,4 +12,5 @@ public interface IExamsRepository
     Task<Result<Exam>> GetExamSpeakingTopicsAsync(Guid examId);
     Task<Result<Exam>> GetExamListeningTopicsAsync(Guid examId);
     Task<Result<Exam>> GetExamReadingTopicsAsync(Guid examId);
+    Task<Result<IEnumerable<Exam>>> GetExams();
 }

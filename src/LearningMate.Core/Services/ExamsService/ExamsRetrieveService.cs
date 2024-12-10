@@ -107,4 +107,17 @@ public partial class ExamsService
         }
         return _examMapper.MapExamToExamHasSpeakingTopicsGetRequestDto(getTopicsResult.Value);
     }
+
+    public async Task<Result<IEnumerable<ExamGetResponseDto>>> GetExams()
+    {
+        var examsQueryResult = await _examsRepository.GetExams();
+        if (examsQueryResult.IsFailed || examsQueryResult.ValueOrDefault is null)
+        {
+            _logger.LogWarning("Failed to get exams");
+            return new ProblemDetailsError(CommonErrorMessages.FailedTo("get exams"));
+        }
+        var dtos = _examMapper.MapExamListToExamGetResponseDtoList(examsQueryResult.Value);
+
+        return Result.Ok(dtos);
+    }
 }

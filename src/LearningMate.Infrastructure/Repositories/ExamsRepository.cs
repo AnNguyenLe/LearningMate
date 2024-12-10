@@ -7,8 +7,8 @@ using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities;
 using LearningMate.Domain.Entities.Listening;
 using LearningMate.Domain.Entities.Reading;
-using LearningMate.Domain.Entities.Writing;
 using LearningMate.Domain.Entities.Speaking;
+using LearningMate.Domain.Entities.Writing;
 using LearningMate.Domain.RepositoryContracts;
 using LearningMate.Infrastructure.Data;
 using LearningMate.Infrastructure.DbContext;
@@ -367,5 +367,23 @@ public class ExamsRepository(
         }
 
         return exam;
+    }
+
+    public async Task<Result<IEnumerable<Exam>>> GetExams()
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = """
+                SELECT 
+                    id, title, created_at
+                FROM exams;
+            """;
+        var queryResult = await dbConnection.QueryAsync<Exam>(sqlQuery);
+
+        if (queryResult is null)
+        {
+            return Result.Ok(Enumerable.Empty<Exam>());
+        }
+
+        return Result.Ok(queryResult);
     }
 }

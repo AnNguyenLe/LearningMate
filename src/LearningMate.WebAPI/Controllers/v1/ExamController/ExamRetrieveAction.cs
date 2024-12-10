@@ -1,3 +1,4 @@
+using System.Collections;
 using LearningMate.Core.Common.ExtensionMethods;
 using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ErrorMessages;
@@ -115,5 +116,20 @@ public partial class ExamController
         }
 
         return getReadingTopicsResult.Value;
+    }
+
+    [HttpGet("exam", Name = nameof(RetrieveExams))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<ExamGetResponseDto>>> RetrieveExams()
+    {
+        var getExamsResult = await _examsService.GetExams();
+
+        if (getExamsResult.IsFailed || getExamsResult.ValueOrDefault is null)
+        {
+            return getExamsResult.Errors.ToDetailedBadRequest();
+        }
+
+        return Ok(getExamsResult.Value);
     }
 }
