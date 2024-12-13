@@ -1,5 +1,6 @@
 using System.Web;
 using FluentResults;
+using LearningMate.Core.Common.Authorization;
 using LearningMate.Core.DTOs.Authentication;
 using LearningMate.Core.Errors;
 using LearningMate.Core.ServiceContracts.Authentication;
@@ -75,7 +76,9 @@ public class AuthenticationService(
 
         await _signInManager.SignInAsync(user, false);
 
-        var accessTokenData = _jwtService.GenerateAccessToken(user);
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var accessTokenData = _jwtService.GenerateAccessToken(user, [.. userRoles]);
 
         return new AuthenticationResponse
         {
@@ -84,7 +87,8 @@ public class AuthenticationService(
             Email = user.Email!,
             AccessToken = accessTokenData.AccessToken,
             ExpiryOfAccessToken = accessTokenData.ExpiresAt,
-            RefreshToken = string.Empty //TODO: RefreshToken Needed!
+            RefreshToken = string.Empty, //TODO: RefreshToken Needed!
+            IsAdmin = userRoles.HasRole(AppUserRoles.ADMIN),
         };
     }
 
@@ -121,7 +125,9 @@ public class AuthenticationService(
 
         await _signInManager.SignInAsync(user, false);
 
-        var accessTokenData = _jwtService.GenerateAccessToken(user);
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var accessTokenData = _jwtService.GenerateAccessToken(user, [.. userRoles]);
 
         return new AuthenticationResponse
         {
@@ -130,7 +136,8 @@ public class AuthenticationService(
             Email = user.Email!,
             AccessToken = accessTokenData.AccessToken,
             ExpiryOfAccessToken = accessTokenData.ExpiresAt,
-            RefreshToken = string.Empty //TODO: RefreshToken Needed!
+            RefreshToken = string.Empty, //TODO: RefreshToken Needed!
+            IsAdmin = userRoles.HasRole(AppUserRoles.ADMIN)
         };
     }
 
@@ -158,7 +165,9 @@ public class AuthenticationService(
             );
         }
 
-        var accessTokenData = _jwtService.GenerateAccessToken(user);
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var accessTokenData = _jwtService.GenerateAccessToken(user, [.. userRoles]);
 
         return new AuthenticationResponse()
         {
@@ -167,7 +176,8 @@ public class AuthenticationService(
             Email = request.Email,
             AccessToken = accessTokenData.AccessToken,
             ExpiryOfAccessToken = accessTokenData.ExpiresAt,
-            RefreshToken = string.Empty //TODO: RefreshToken Needed!
+            RefreshToken = string.Empty, //TODO: RefreshToken Needed!
+            IsAdmin = userRoles.HasRole(AppUserRoles.ADMIN)
         };
     }
 

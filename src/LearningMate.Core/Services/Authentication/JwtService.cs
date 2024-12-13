@@ -1,37 +1,49 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using LearningMate.Core.Common.Authorization;
 using LearningMate.Core.ConfigurationOptions.Jwt;
 using LearningMate.Core.ServiceContracts.Authentication;
 using LearningMate.Domain.IdentityEntities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace LearningMate.Core.Services.Authentication;
 
-public class JwtService(ILogger<JwtService> logger, IOptions<JwtConfiguration> jwtConfiguration)
-    : IJwtService
+public class JwtService(
+    ILogger<JwtService> logger,
+    IOptions<JwtConfiguration> jwtConfiguration,
+    UserManager<AppUser> userManager
+) : IJwtService
 {
     private readonly ILogger<JwtService> _logger = logger;
+    private readonly UserManager<AppUser> _userManager = userManager;
     private readonly JwtConfiguration _jwtConfiguration = jwtConfiguration.Value;
 
-    public AccessTokenData GenerateAccessToken(AppUser user)
+    public AccessTokenData GenerateAccessToken(AppUser user, List<string> roles)
     {
         _logger.LogInformation(nameof(GenerateAccessToken));
 
         var expiresAt = DateTime.UtcNow.AddHours(_jwtConfiguration.AccessTokenLifeTimeInHours);
 
-        var claims = new Claim[]
-        {
+        List<Claim> claims =
+        [
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            // new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new(JwtRegisteredClaimNames.Exp, expiresAt.ToString()),
             new(ClaimTypes.NameIdentifier, user.Email!),
             new(ClaimTypes.Name, user.Email!),
             new(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"),
-        };
+        ];
+        if (roles.Count > 0)
+        {
+            roles.ForEach(role =>
+            {
+                claims.Add(new(ClaimTypes.Role, role));
+            });
+        }
 
         return new AccessTokenData
         {

@@ -8,4 +8,5 @@ public class AuthenticationResponse
     public required string AccessToken { get; set; }
     public DateTime ExpiryOfAccessToken { get; set; }
     public required string RefreshToken { get; set; }
+    public required bool IsAdmin { get; set; }
 }
