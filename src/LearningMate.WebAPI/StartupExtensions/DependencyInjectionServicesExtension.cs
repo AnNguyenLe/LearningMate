@@ -38,6 +38,8 @@ using LearningMate.Core.Services.WritingTopicsService;
 using LearningMate.Domain.RepositoryContracts;
 using LearningMate.Infrastructure.Data;
 using LearningMate.Infrastructure.Repositories;
+using LearningMate.TextToSpeech.ServiceContracts;
+using LearningMate.TextToSpeech.Services.GCP;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace LearningMate.WebAPI.StartupExtensions;
@@ -97,6 +99,7 @@ public static class DependencyInjectionServicesExtension
             IEnglishSkillsAIAssistedFeedbackService,
             EnglishSkillsAIAssistedFeedbackService
         >();
+        services.AddScoped<ITextToSpeechService, GCPTextToSpeechService>();
 
         return services;
     }

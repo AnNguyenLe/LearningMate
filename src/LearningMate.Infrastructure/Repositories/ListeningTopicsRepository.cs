@@ -4,8 +4,8 @@ using FluentResults;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
-using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
 using LearningMate.Domain.Entities.Listening;
+using LearningMate.Domain.Entities.QuestionTypes.MultipleChoice;
 using LearningMate.Domain.RepositoryContracts;
 using LearningMate.Infrastructure.Data;
 using Microsoft.Extensions.Logging;
@@ -78,7 +78,7 @@ public class ListeningTopicsRepository(
         return isExist;
     }
 
-    public async Task<Result<ListeningTopic>> GetListeningTopicById(Guid id)
+    public async Task<Result<ListeningTopic>> GetListeningTopicWithSolutionById(Guid id)
     {
         using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
         var sqlQuery = """
@@ -129,5 +129,28 @@ public class ListeningTopicsRepository(
             );
         }
         return listeningTopicResult;
+    }
+
+    public async Task<Result<ListeningTopic>> GetTopicById(Guid id)
+    {
+        using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
+        var sqlQuery = """
+                SELECT id, category, title, content, score_band, score
+                FROM listening_topics
+                WHERE id = @id;
+            """;
+        var queryResult = await dbConnection.QueryFirstAsync<ListeningTopic>(sqlQuery, new { id });
+        if (queryResult is null)
+        {
+            _logger.LogError(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "get listening topic content",
+                id
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo("get listening topic content")
+            );
+        }
+        return queryResult;
     }
 }

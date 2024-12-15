@@ -78,7 +78,7 @@ public class ReadingTopicsRepository(
         return isExist;
     }
 
-    public async Task<Result<ReadingTopic>> GetReadingTopicById(Guid id)
+    public async Task<Result<ReadingTopic>> GetReadingTopicWithSolutionById(Guid id)
     {
         using var dbConnection = await _dbConnectionFactory.CreateConnectionAsync();
         var sqlQuery = """

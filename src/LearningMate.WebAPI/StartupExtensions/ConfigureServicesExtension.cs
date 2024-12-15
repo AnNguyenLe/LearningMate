@@ -7,6 +7,7 @@ using LearningMate.Core.ConfigurationOptions.Jwt;
 using LearningMate.Core.ConfigurationOptions.Smtp;
 using LearningMate.Domain.IdentityEntities;
 using LearningMate.Infrastructure.DbContext;
+using LearningMate.TextToSpeech.ConfigOptions.GCP;
 using LearningMate.WebAPI.ExceptionHandlers;
 using LearningMate.WebAPI.Filters.ActionFilterAttributes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -168,6 +169,9 @@ public static class ConfigureServicesExtension
         services.Configure<SmtpConfiguration>(configuration.GetSection("SmtpSettings"));
         services.Configure<MyAppServerConfiguration>(configuration.GetSection("MyAppServer"));
         services.Configure<GeminiFlashOptions>(configuration.GetSection("GeminiFlashOptions"));
+        services.Configure<GoogleCredentialOptions>(
+            configuration.GetSection("GoogleCreadentialOptions")
+        );
 
         return services;
     }

@@ -5,6 +5,7 @@ using LearningMate.Core.DTOs.ListeningTopicQuestionDTOs;
 using LearningMate.Core.ServiceContracts.ListeningTopicQuestionsServiceContract;
 using LearningMate.Core.ServiceContracts.ListeningTopicsServiceContract;
 using LearningMate.Domain.IdentityEntities;
+using LearningMate.TextToSpeech.ServiceContracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
@@ -17,7 +18,8 @@ public partial class ListeningTopicController(
     IValidator<ListeningTopicCreateRequestDto> listeningTopicCreateRequestValidator,
     IValidator<ListeningTopicQuestionCreateRequestDto> listeningTopicQuestionCreateRequestValidator,
     IListeningTopicsService listeningTopicsService,
-    IListeningTopicQuestionsService listeningTopicQuestionsService
+    IListeningTopicQuestionsService listeningTopicQuestionsService,
+    ITextToSpeechService textToSpeechService
 ) : CustomControllerBaseV1(userManager, myAppServerConfiguration)
 {
     private readonly ILogger<ListeningTopicController> _logger = logger;
@@ -28,4 +30,5 @@ public partial class ListeningTopicController(
     private readonly IListeningTopicsService _listeningTopicsService = listeningTopicsService;
     private readonly IListeningTopicQuestionsService _listeningTopicQuestionsService =
         listeningTopicQuestionsService;
+    private readonly ITextToSpeechService _textToSpeechService = textToSpeechService;
 }

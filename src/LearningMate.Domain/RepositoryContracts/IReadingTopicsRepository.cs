@@ -7,5 +7,5 @@ public interface IReadingTopicsRepository
 {
     Task<Result<bool>> CheckReadingTopicExistsAsync(Guid topicId);
     Task<Result<int>> AddTopicAsync(ReadingTopic topic);
-    Task<Result<ReadingTopic>> GetReadingTopicById(Guid id);
+    Task<Result<ReadingTopic>> GetReadingTopicWithSolutionById(Guid id);
 }

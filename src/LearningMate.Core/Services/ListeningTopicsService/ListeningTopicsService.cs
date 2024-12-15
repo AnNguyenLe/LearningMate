@@ -13,7 +13,8 @@ public partial class ListeningTopicsService(
 ) : IListeningTopicsService
 {
     private readonly ILogger<ListeningTopicsService> _logger = logger;
-    private readonly IListeningTopicsRepository _listeningTopicsRepository = listeningTopicsRepository;
+    private readonly IListeningTopicsRepository _listeningTopicsRepository =
+        listeningTopicsRepository;
     private readonly ListeningTopicMapper _listeningTopicMapper = listeningTopicMapper;
     private readonly IExamsRepository _examsRepository = examsRepository;
 }

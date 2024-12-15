@@ -20,7 +20,9 @@ public partial class ReadingTopicsService
                 CommonErrorMessages.RecordNotFoundWithId(nameof(ReadingTopic), id)
             );
         }
-        var topicRetrieveResult = await _readingTopicsRepository.GetReadingTopicById(id);
+        var topicRetrieveResult = await _readingTopicsRepository.GetReadingTopicWithSolutionById(
+            id
+        );
 
         if (topicRetrieveResult.IsFailed)
         {

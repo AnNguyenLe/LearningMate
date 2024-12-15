@@ -5,7 +5,9 @@ using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities.Listening;
 using Microsoft.Extensions.Logging;
+
 namespace LearningMate.Core.Services.ListeningTopicsService;
+
 public partial class ListeningTopicsService
 {
     public async Task<Result<ListeningTopicSolutionResponseDto>> GetTopicSolutionAsync(Guid id)
@@ -17,18 +19,39 @@ public partial class ListeningTopicsService
                 CommonErrorMessages.RecordNotFoundWithId(nameof(ListeningTopic), id)
             );
         }
-        var topicRetrieveResult = await _listeningTopicsRepository.GetListeningTopicById(id);
+        var topicRetrieveResult =
+            await _listeningTopicsRepository.GetListeningTopicWithSolutionById(id);
         if (topicRetrieveResult.IsFailed)
+        {
+            _logger.LogWarning(
+                CommonLoggingMessages.FailedToPerformActionWithId,
+                "retrieve listening topic with solution",
+                id
+            );
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo("retrieve listening topic with solution")
+            );
+        }
+        return _listeningTopicMapper.MapListeningTopicToListeningTopicSolutionResponseDto(
+            topicRetrieveResult.Value
+        );
+    }
+
+    public async Task<Result<ListeningTopic>> GetTopicContent(Guid id)
+    {
+        var queryResult = await _listeningTopicsRepository.GetTopicById(id);
+        if (queryResult.IsFailed)
         {
             _logger.LogWarning(
                 CommonLoggingMessages.FailedToPerformActionWithId,
                 "retrieve listening topic",
                 id
             );
-            return new ProblemDetailsError(CommonErrorMessages.FailedTo("retrieve listening topic"));
+            return new ProblemDetailsError(
+                CommonErrorMessages.FailedTo("retrieve listening topic")
+            );
         }
-        return _listeningTopicMapper.MapListeningTopicToListeningTopicSolutionResponseDto(
-            topicRetrieveResult.Value
-        );
+
+        return queryResult.Value;
     }
 }
