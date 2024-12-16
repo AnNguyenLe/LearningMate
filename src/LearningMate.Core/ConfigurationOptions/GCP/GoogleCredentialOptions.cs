@@ -1,4 +1,4 @@
-namespace LearningMate.TextToSpeech.ConfigOptions.GCP;
+namespace LearningMate.Core.ConfigurationOptions.GCP;
 
 public class GoogleCredentialOptions
 {

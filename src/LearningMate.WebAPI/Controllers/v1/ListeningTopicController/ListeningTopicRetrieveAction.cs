@@ -27,7 +27,7 @@ public partial class ListeningTopicController
             return Problem(detail: "Topic content is empty");
         }
 
-        var audioStream = await _textToSpeechService.GenerateAudioAsync(topicContent);
+        var audioStream = await _textToSpeechService.SynthesizeAsync(topicContent);
 
         var fileDownloadName = $"{topic.Title}.mp3";
 

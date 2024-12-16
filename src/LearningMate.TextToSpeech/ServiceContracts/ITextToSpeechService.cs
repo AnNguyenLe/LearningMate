@@ -4,5 +4,5 @@ namespace LearningMate.TextToSpeech.ServiceContracts;
 
 public interface ITextToSpeechService
 {
-    Task<Result<MemoryStream>> GenerateAudioAsync(string sampleText);
+    Task<Result<MemoryStream>> SynthesizeAsync(string sampleText);
 }

@@ -1,7 +1,7 @@
 using FluentResults;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.TextToSpeech.V1;
-using LearningMate.TextToSpeech.ConfigOptions.GCP;
+using LearningMate.Core.ConfigurationOptions.GCP;
 using LearningMate.TextToSpeech.ServiceContracts;
 using Microsoft.Extensions.Options;
 
@@ -12,12 +12,9 @@ public class GCPTextToSpeechService(IOptions<GoogleCredentialOptions> googleCred
 {
     private readonly GoogleCredentialOptions _googleCredential = googleCredentialOptions.Value;
 
-    public async Task<Result<MemoryStream>> GenerateAudioAsync(string sampleText)
+    public async Task<Result<MemoryStream>> SynthesizeAsync(string sampleText)
     {
         var credential = GoogleCredential.FromFile(_googleCredential.FilePath);
-        // var credential = GoogleCredential.FromFile(
-        //     "/Users/thienannguyenle/Downloads/tts-software-design-course-gcp.json"
-        // );
 
         var ttsClientBuilder = new TextToSpeechClientBuilder { GoogleCredential = credential };
 

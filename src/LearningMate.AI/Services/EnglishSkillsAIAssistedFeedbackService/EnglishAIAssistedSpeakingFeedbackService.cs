@@ -6,6 +6,7 @@ using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.Errors;
 using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities.Speaking;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace LearningMate.AI.Services.EnglishSkillsAIAssistedFeedbackService;
@@ -14,7 +15,7 @@ public partial class EnglishSkillsAIAssistedFeedbackService
 {
     public async Task<Result<SpeakingTopicFeedbackResponseDto>> GenerateSpeakingFeedback(
         Guid topicId,
-        SpeakingTopicSubmitRequestDto submittedAnswer
+        IFormFile audioFile
     )
     {
         var topicQueryResult = await _speakingTopicsService.GetTopicAsync(topicId);
@@ -31,8 +32,25 @@ public partial class EnglishSkillsAIAssistedFeedbackService
             );
         }
 
+        var transcribeProcess = await _speechService.TranscribeAudioAsync(audioFile);
+
+        if (transcribeProcess.IsFailed || transcribeProcess.ValueOrDefault is null)
+        {
+            _logger.LogWarning("Error processing audio");
+            return new ProblemDetailsError(CommonErrorMessages.FailedTo("processing audio"));
+        }
+
+        if (transcribeProcess.ValueOrDefault.Trim() == string.Empty)
+        {
+            _logger.LogWarning("Transcription is empty.");
+            return new ProblemDetailsError(
+                title: "Cannot giving feedback as the transcription is empty",
+                detail: "Make sure you mic is working properly or enable audio recording"
+            );
+        }
+
         var prompt = GeneratePromptForSpeakingTopicFeedback(
-            submittedAnswer,
+            transcribeProcess.Value,
             topicQueryResult.Value
         );
 
@@ -56,7 +74,7 @@ public partial class EnglishSkillsAIAssistedFeedbackService
     }
 
     private static string GeneratePromptForSpeakingTopicFeedback(
-        SpeakingTopicSubmitRequestDto submittedAnswer,
+        string transcription,
         SpeakingTopic topic
     )
     {
@@ -67,8 +85,8 @@ public partial class EnglishSkillsAIAssistedFeedbackService
                 Category: {topic.Category}
                 Resources in the form of json-stringified if any: {topic.SerializedResourcesUrl}
 
-                and the examinee speaking submission: 
-                {submittedAnswer.Essay}
+                and the examinee speaking submission:
+                {transcription}
 
                 Write me back in JSON format and each item of the list using the following pattern so that I can easily destringify.
                 Apply for all questions. And the final result should be in clean JSON format:

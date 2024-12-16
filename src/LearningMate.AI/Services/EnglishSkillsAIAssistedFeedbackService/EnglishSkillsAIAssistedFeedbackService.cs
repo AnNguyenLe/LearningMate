@@ -1,18 +1,10 @@
-using System.Text.Json;
-using FluentResults;
 using LearningMate.AI.ServiceContracts.EnglishSkillsAIAssistedFeedbackServiceContract;
 using LearningMate.AI.ServiceContracts.PromptServiceContract;
-using LearningMate.Core.DTOs.ListeningTopicDTOs;
-using LearningMate.Core.DTOs.ReadingTopicDTOs;
-using LearningMate.Core.DTOs.WritingTopicDTOs;
-using LearningMate.Core.DTOs.SpeakingTopicDTOs;
-using LearningMate.Core.ErrorMessages;
-using LearningMate.Core.Errors;
-using LearningMate.Core.LoggingMessages;
 using LearningMate.Core.ServiceContracts.ListeningTopicsServiceContract;
 using LearningMate.Core.ServiceContracts.ReadingTopicsServiceContract;
 using LearningMate.Core.ServiceContracts.SpeakingTopicsServiceContract;
 using LearningMate.Core.ServiceContracts.WritingTopicsServiceContract;
+using LearningMate.Speech.ServiceContracts;
 using Microsoft.Extensions.Logging;
 
 namespace LearningMate.AI.Services.EnglishSkillsAIAssistedFeedbackService;
@@ -96,7 +88,8 @@ public partial class EnglishSkillsAIAssistedFeedbackService(
     IListeningTopicsService listeningTopicsService,
     IWritingTopicsService writingTopicsService,
     ISpeakingTopicsService speakingTopicsService,
-    IPromptService promptService
+    IPromptService promptService,
+    ISpeechService speechService
 ) : IEnglishSkillsAIAssistedFeedbackService
 {
     private readonly ILogger<EnglishSkillsAIAssistedFeedbackService> _logger = logger;
@@ -105,4 +98,5 @@ public partial class EnglishSkillsAIAssistedFeedbackService(
     private readonly IWritingTopicsService _writingTopicsService = writingTopicsService;
     private readonly ISpeakingTopicsService _speakingTopicsService = speakingTopicsService;
     private readonly IPromptService _promptService = promptService;
+    private readonly ISpeechService _speechService = speechService;
 }
