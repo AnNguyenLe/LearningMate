@@ -2,6 +2,7 @@ using System.Net.Mime;
 using System.Text;
 using Asp.Versioning;
 using LearningMate.AI.ConfigOptions;
+using LearningMate.Core.Common.Authorization;
 using LearningMate.Core.ConfigurationOptions.AppServer;
 using LearningMate.Core.ConfigurationOptions.GCP;
 using LearningMate.Core.ConfigurationOptions.Jwt;
@@ -31,6 +32,16 @@ public static class ConfigureServicesExtension
     {
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
+
+        services
+            .AddAuthorizationBuilder()
+            .AddPolicy(
+                AppPolicies.RequireAdmin,
+                policy =>
+                {
+                    policy.RequireRole(AppUserRoles.ADMIN);
+                }
+            );
 
         services
             .AddControllers(options =>

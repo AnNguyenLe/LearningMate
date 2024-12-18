@@ -1,14 +1,17 @@
+using LearningMate.Core.Common.Authorization;
 using LearningMate.Core.Common.ExtensionMethods;
 using LearningMate.Core.DTOs.ExamDTOs;
 using LearningMate.Core.ErrorMessages;
 using LearningMate.Core.LoggingMessages;
 using LearningMate.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningMate.WebAPI.Controllers.v1.ExamController;
 
 public partial class ExamController
 {
+    // [Authorize(Policy = AppPolicies.RequireAdmin)]
     [HttpPost("exam/create", Name = nameof(CreateExam))]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
